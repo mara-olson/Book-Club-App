@@ -17,11 +17,18 @@ class Book(db.Model):
     notes = db.relationship("Note", back_populates="book")
     
     @classmethod
-    def create_book(title, author):
+    def create_book(cls, title, author):
         """Add a new book to the database."""
-        book = Book(title=title, author=author)
+        book = cls(title=title, author=author)
+        db.session.add(book)
+        db.session.commit()
 
         return book
+
+    @classmethod
+    def get_book_by_title(cls, title):
+        """Retrieve a book by its title."""
+        return Book.query.filter(Book.title==title).first()
 
     def __repr__(self):
         return f'<Book id={self.book_id} title={self.title}'
@@ -40,11 +47,14 @@ class Note(db.Model):
     book = db.relationship("Book", back_populates="notes")
     
     @classmethod
-    def create_note(book, content):
+    def create_note(cls, book, content):
         """Add a new book to the database."""
-        note = Note(book=book, conent=content)
+        note = cls(book=book, content=content)
+        db.session.add(note)
+        db.session.commit()
 
         return note
+    
 
     def __repr__(self):
         return f'<Note id={self.note_id} content={self.content[:8]}'
