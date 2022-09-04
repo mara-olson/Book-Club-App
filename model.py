@@ -15,6 +15,13 @@ class Book(db.Model):
     # note_ids = db.Column(db.ARRAY)
 
     notes = db.relationship("Note", back_populates="book")
+    
+    @classmethod
+    def create_book(title, author):
+        """Add a new book to the database."""
+        book = Book(title=title, author=author)
+
+        return book
 
     def __repr__(self):
         return f'<Book id={self.book_id} title={self.title}'
@@ -32,6 +39,12 @@ class Note(db.Model):
 
     book = db.relationship("Book", back_populates="notes")
     
+    @classmethod
+    def create_note(book, content):
+        """Add a new book to the database."""
+        note = Note(book=book, conent=content)
+
+        return note
 
     def __repr__(self):
         return f'<Note id={self.note_id} content={self.content[:8]}'
