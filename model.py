@@ -59,7 +59,7 @@ class Note(db.Model):
     def __repr__(self):
         return f'<Note id={self.note_id} content={self.content[:8]}'
 
-def connect_to_db(flask_app, db_uri="postgresql:///ratings", echo=True):
+def connect_to_db(flask_app, db_uri="postgresql:///bookclub", echo=True):
     flask_app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
     flask_app.config["SQLALCHEMY_ECHO"] = echo
     flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -68,6 +68,7 @@ def connect_to_db(flask_app, db_uri="postgresql:///ratings", echo=True):
     db.init_app(flask_app)
 
     print("Connected to the db!")
+    db.create_all()
 
 
 if __name__ == "__main__":
