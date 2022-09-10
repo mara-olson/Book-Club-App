@@ -59,22 +59,4 @@ document.getElementById("add-book-form").addEventListener("submit", (evt) => {
   //   });
 });
 
-window.addEventListener("load", (evt) => {
-  const bookList = document.getElementById("book-list");
-  const newBook = document.createElement("li");
-
-  fetch("/library")
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data.books);
-      for (book in data.books) {
-        console.log(data.books[book].title);
-        bookList
-          .insertAdjacentElement("beforeend", newBook)
-          .classList.add("list-group-item");
-        newBook.insertAdjacentHTML("beforeend", data.books[book].title);
-      }
-    });
-});
-
 // addBookBtn.addEventListener("click", addBook);

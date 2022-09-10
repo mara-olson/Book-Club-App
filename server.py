@@ -36,24 +36,33 @@ def add_book():
 
     return jsonify({"bookTitle": new_book.title})
 
-@app.route("/library")
+@app.route("/api/library")
 def all_books():
     """All book titles in database."""
     books = []
+    book_titles =[]
 
     all_books = Book.query.all()
     for book in all_books:
         print("*"*5,book)
-        new_book = {
-            "book_id": book.book_id, "title": book.title,
-            "author": book.author,
-            "year_published": book.year_published,
-            "date_read": book.date_read,
-            "rating": book.rating
-        }
-        books.append(new_book)
+        if book.title not in book_titles:
+            new_book = {
+                "book_id": book.book_id, "title": book.title,
+                "author": book.author,
+                "year_published": book.year_published,
+                "date_read": book.date_read,
+                "rating": book.rating
+            }
+            book_titles.append(book.title)
+            books.append(new_book)
+        
 
     return jsonify({"books": books})
+
+@app.route("/library")
+def library_page():
+    """Display all book titles in database."""
+    return render_template("library.html")
 
 
 if __name__ == "__main__":

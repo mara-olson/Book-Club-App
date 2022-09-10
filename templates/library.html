@@ -1,1 +1,13 @@
-{% extends 'index.html' %} {% block title %}Library{% endblock %}
+{% extends 'base.html' %} {% block title %}Library{% endblock %} {% block
+content %}
+<body>
+  <div class="card" id="library-container" style="width: 18rem">
+    <h2>Reading List</h2>
+    <div>
+        <ul class="list-group" id="book-list"></ul>
+      </div>
+  {% endblock %}
+</body>
+{% block script %}
+<script src="/static/library.js" type="text/javascript"></script>
+{% endblock %}
