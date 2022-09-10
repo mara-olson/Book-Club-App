@@ -36,7 +36,7 @@ def add_book():
 
     return jsonify({"bookTitle": new_book.title})
 
-@app.route("/all-books")
+@app.route("/library")
 def all_books():
     """All book titles in database."""
     books = []
