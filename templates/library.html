@@ -1,10 +1,18 @@
 {% extends 'base.html' %} {% block title %}Library{% endblock %} {% block
 content %}
 <body>
-  <div class="card" id="library-container" style="width: 18rem">
+  <div class="card" id="library-container" style="width: 4\60rem">
     <h2>Reading List</h2>
     <div>
-      <ul class="list-group" id="book-list"></ul>
+      
+      <table id="book-table" class="list-group">
+        <th>Title</th>
+        <th>Author</th>
+        <th>Year Published</th>
+        <th>Date Read</th>
+        <th>Rating</th>
+      </table>
+      <ul  id="book-list"></ul>
     </div>
   </div>
   <div class="fade modal" tabindex="-1" role="dialog" id="add-book-modal" aria-hidden="true">
