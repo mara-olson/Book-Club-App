@@ -55,9 +55,12 @@ def all_books():
             }
             book_titles.append(book.title)
             books.append(new_book)
+
+    last_book = books[-1]
+    print("LAST BOOK: ", last_book)
         
 
-    return jsonify({"books": books})
+    return jsonify({"books": books, "last_book": last_book})
 
 @app.route("/library")
 def library_page():
