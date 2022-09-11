@@ -10,7 +10,7 @@ content %}
   <div class="fade modal" tabindex="-1" role="dialog" id="add-book-modal" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <form id="add-book-form">
+        <form id="add-book-form" action="/api/add-book" method="post">
         <div class="modal-header">
           <h5 class="modal-title">Modal title</h5>
           
@@ -63,7 +63,7 @@ content %}
         <div class="modal-footer">
           <button
             type="submit"
-            class="btn btn-secondary"
+            class="btn btn-primary"
             id="submit-new-book-btn"
             data-dismiss="modal"
           >
