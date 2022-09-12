@@ -8,3 +8,8 @@
 .list-group-item {
   border-style: none;
 }
+
+th,
+td {
+  padding-right: 30px;
+}
