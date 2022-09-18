@@ -1,0 +1,13 @@
+{% extends 'base.html' %} {% block title %}Book{% endblock %} {% block content
+%}
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">{{title}}</h1>
+    <h4>{{author}}</h4>
+    <p class="lead">Published in {{published}}</p>
+    <p class="lead">Read on {{read}}</p>
+  </div>
+</div>
+{% endblock %} {% block script %}
+<script src="/static/bookDetails.js" type="text/javascript"></script>
+{% endblock %}

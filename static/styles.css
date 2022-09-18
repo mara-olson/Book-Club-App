@@ -13,3 +13,8 @@ th,
 td {
   padding-right: 30px;
 }
+
+.lead {
+  line-height: 15px;
+  margin: 15px 0;
+}

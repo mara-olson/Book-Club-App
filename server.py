@@ -1,7 +1,7 @@
 from flask import Flask, render_template, json, jsonify, request, flash, session, redirect;
 import os
 from model import connect_to_db, db, Book, Note
-from datetime import datetime
+import datetime
 import crud
 
 from jinja2 import StrictUndefined
@@ -17,6 +17,7 @@ def homepage():
     """Landing page for bookclub app."""
     
     return render_template('base.html')
+
 
 @app.route("/api/add-book", methods=["POST"])
 def add_book():
@@ -35,6 +36,7 @@ def add_book():
     new_book = Book.create_book(title=new_book_title, author=new_book_author, year_published=new_book_year, date_read=new_book_date_read, rating=new_book_rating)
 
     return jsonify({"bookTitle": new_book.title, "bookAuthor": new_book.author, "bookPubYr": new_book.year_published, "bookDateRead": new_book["date_read"][:10], "bookRating": new_book.rating})
+
 
 @app.route("/api/library")
 def all_books():
@@ -58,14 +60,23 @@ def all_books():
 
     last_book = books[-1]
     print("LAST BOOK: ", last_book)
-        
 
     return jsonify({"books": books, "last_book": last_book})
+
 
 @app.route("/library")
 def library_page():
     """Display all book titles in database."""
     return render_template("library.html")
+
+@app.route("/library/<book_title>")
+def book_details(book_title):
+    """Specific details about a particular book."""
+    book = Book.get_book_by_title(book_title)
+    date_read = str(book.date_read)[:10]
+    
+    return render_template("book_details.html", title=book_title, author = book.author, published=book.year_published, read=date_read)
+
 
 
 if __name__ == "__main__":
