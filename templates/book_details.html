@@ -8,13 +8,77 @@
     <p class="lead">Read on {{read}}</p>
   </div>
 </div>
-<div class="card" id="notes-container" style="width: 4\60rem">
-  <p>Notes</p>
-  <form method="post" id="notes-form">
-    <input type="text" id="entered-notes" placeholder="Notes here"></input>
-    <button type="submit">Submit</button>
-    <p id=""></p>
-  </form>
+<div id="notes-accordion" class="accordion">
+    <div class="card">
+        <div class="card-header" id="content-notes-header">
+            <h4 >
+                <button class="btn" data-toggle="collapse" role="button" href="#content-notes" aria-expanded="true" aria-controls="collapseOne">Content Notes</button>
+            </h4> 
+        </div>
+        <div id="content-notes" class="collapse hide" aria-labelledby="content-notes-header" data-parent="#accordion">
+            <div class="card-body" id="content-notes-body">
+            <ul class="list-group list-group-flush" id="content-notes-list">
+                <li class="list-group-item" id="content-notes-item">Item 1</li>
+                <li class="list-group-item" id="content-notes-item">Item 2</li>
+            </ul>
+            </div>
+            <form method="post" id="notes-form">
+                <div class="form-group">
+                    <label for="entered-content-notes">Add notes</label>
+                    <textarea class="form-control" type="text" id="entered-content-notes" placeholder="Notes here"
+                    rows="4"></textarea>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+                
+                <p id=""></p>
+            </form>
+        </div>
+        <div class="card-header" id="quotes-header">
+            <h4 >
+                <button class="btn" data-toggle="collapse" role="button" href="#quotes-notes" aria-expanded="true" aria-controls="collapseOne">Quotes</button>
+            </h4> 
+        </div>
+        <div id="quotes-notes" class="collapse hide" aria-labelledby="quotes-notes-header" data-parent="#accordion">
+            <div class="card-body" id="quotes-notes-body">
+            <ul class="list-group list-group-flush" id="quotes-notes-list">
+                <li class="list-group-item" id="quotes-notes-item">Item 1</li>
+                <li class="list-group-item" id="quotes-notes-item">Item 2</li>
+            </ul>
+            </div>
+            <form method="post" id="notes-form">
+                <div class="form-group">
+                    <label for="entered-quotes-notes">Add notes</label>
+                    <textarea class="form-control" type="text" id="entered-quotes-notes" placeholder="Notes here"
+                    rows="4"></textarea>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+        <div class="card-header" id="quotes-header">
+            <h4 >
+                <button class="btn" data-toggle="collapse" role="button" href="#vocab-notes" aria-expanded="true" aria-controls="collapseOne">Vocab</button>
+            </h4> 
+        </div>
+        <div id="vocab-notes" class="collapse hide" aria-labelledby="vocab-notes-header" data-parent="#accordion">
+            <div class="card-body" id="vocab-notes-body">
+            <ul class="list-group list-group-flush" id="vocab-notes-list">
+                <li class="list-group-item" id="vocab-notes-item">Item 1</li>
+                <li class="list-group-item" id="vocab-notes-item">Item 2</li>
+            </ul>
+            </div>
+            <form method="post" id="notes-form">
+                <div class="form-group">
+                    <label for="entered-vocab-notes">Add notes</label>
+                    <textarea class="form-control" type="text" id="entered-vocab-notes" placeholder="Notes here"
+                    rows="4"></textarea>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+  
+  
 </div>
 {% endblock %} {% block script %}
 <script src="/static/bookDetails.js" type="text/javascript"></script>
