@@ -80,17 +80,17 @@ def book_details(book_title):
     return render_template("book_details.html", title=book_title, author = book.author, published=book.year_published, read=date_read, rating=book.rating, notes=book.notes)
 
 
-@app.route("/api/library/<book_title>/add-notes")
+@app.route("/api/library/<book_title>/add-notes", methods=["POST"])
 def save_book_notes(book_title):
     """Add and save user-entered notes."""
 
     book = Book.get_book_by_title(book_title)
 
-    notes = request.args.get("entered-notes")
+    notes = request.json.get("notes")
     print(notes, "!!!!!!!!!!!!!!!")
 
 
-    return render_template("base.html")
+    return jsonify({"author": book.author})
 
 
 
