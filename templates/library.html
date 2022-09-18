@@ -3,14 +3,18 @@ content %}
 <body>
   <div class="card" id="library-container" style="width: 4\60rem">
     <h2>Reading List</h2>
-    <div>
+    <div class="table-responsive">
       
-      <table id="book-table" class="list-group">
-        <th>Title</th>
-        <th>Author</th>
-        <th>Year Published</th>
-        <th>Date Read</th>
-        <th>Rating</th>
+      <table id="book-table" class="table table-sm  table-hover">
+        <thead class="thead-dark"></thead>
+        <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Author</th>
+        <th scope="col">Year Published</th>
+        <th scope="col">Date Read</th>
+        <th scope="col">Rating</th>
+      </tr>
+    </thead>
       </table>
       <ul  id="book-list"></ul>
     </div>
