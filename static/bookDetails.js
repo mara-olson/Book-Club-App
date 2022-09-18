@@ -1,17 +1,23 @@
-// function addRowHandlers() {
-//   const table = document.getElementById("book-table");
-//   const rows = table.getElementsByTagName("tr");
-//   for (i = 0; i < rows.length; i++) {
-//     const currentRow = table.rows[i];
-//     const createClickHandler = function (row) {
-//       return function () {
-//         const cell = row.getElementsByTagName("td")[0];
-//         const id = cell.innerHTML;
-//         alert("id:" + id);
-//       };
-//     };
-//     currentRow.onclick = createClickHandler(currentRow);
-//   }
-// }
+const book_title = document.getElementById("book-title").innerHTML;
+console.log(book_title);
 
-// window.onload = addRowHandlers();
+const handleSubmit = () => {
+  const book_title = document.getElementById("book-title").innerHTML;
+
+  const url = `/api/library/${book_title}/add-notes`;
+
+  //   const saveNotes = () => {
+  //     const notes = document.getElementById("book-list");
+
+  //     fetch("/api/library")
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         const newBook = document.createElement("li");
+
+  document
+    .getElementById("notes-form")
+    .addEventListener("submit", function (s) {
+      s.preventDefault();
+      this.action = url;
+    });
+};

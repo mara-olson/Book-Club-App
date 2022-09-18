@@ -69,13 +69,28 @@ def library_page():
     """Display all book titles in database."""
     return render_template("library.html")
 
+
 @app.route("/library/<book_title>")
 def book_details(book_title):
     """Specific details about a particular book."""
     book = Book.get_book_by_title(book_title)
     date_read = str(book.date_read)[:10]
+    notes = Book.notes
     
-    return render_template("book_details.html", title=book_title, author = book.author, published=book.year_published, read=date_read)
+    return render_template("book_details.html", title=book_title, author = book.author, published=book.year_published, read=date_read, rating=book.rating, notes=book.notes)
+
+
+@app.route("/api/library/<book_title>/add-notes")
+def save_book_notes(book_title):
+    """Add and save user-entered notes."""
+
+    book = Book.get_book_by_title(book_title)
+
+    notes = request.args.get("entered-notes")
+    print(notes, "!!!!!!!!!!!!!!!")
+
+
+    return render_template("base.html")
 
 
 

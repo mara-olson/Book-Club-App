@@ -2,11 +2,18 @@
 %}
 <div class="jumbotron jumbotron-fluid">
   <div class="container">
-    <h1 class="display-4">{{title}}</h1>
+    <h1 class="display-4" id="book-title">{{title}}</h1>
     <h4>{{author}}</h4>
     <p class="lead">Published in {{published}}</p>
     <p class="lead">Read on {{read}}</p>
   </div>
+</div>
+<div class="card" id="notes-container" style="width: 4\60rem">
+  <p>Notes</p>
+  <form action="" id="notes-form">
+    <input type="text" id="entered-notes" placeholder="Notes here"></input>
+    <button type="submit">Submit</button>
+  </form>
 </div>
 {% endblock %} {% block script %}
 <script src="/static/bookDetails.js" type="text/javascript"></script>
