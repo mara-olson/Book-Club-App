@@ -88,11 +88,9 @@ def save_book_notes(book_title):
     data = request.json
     notes = data.get("notes")
 
+    new_note = Note.create_note(book, notes)
 
-    print(notes, "!!!!!!!!!!!!!!!")
-
-
-    return jsonify({"author": book.author})
+    return jsonify({"noteContent": new_note.content})
 
 
 

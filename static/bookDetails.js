@@ -12,6 +12,8 @@ document.getElementById("notes-form").addEventListener("submit", function (s) {
     notes: document.getElementById("entered-content-notes").value,
   };
 
+  const notesList = document.getElementById("content-notes-list");
+
   fetch(`/api/library/${book_title}/add-notes`, {
     method: "POST",
     body: JSON.stringify(formInputs),
@@ -21,12 +23,14 @@ document.getElementById("notes-form").addEventListener("submit", function (s) {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data.author);
+      console.log(data.noteContent);
 
-      //   bookList
-      //     .insertAdjacentElement("beforeend", newBook)
-      //     .classList.add("list-group-item");
-      //   newBook.insertAdjacentHTML("beforeend", data.last_book.title);
+      const newNote = document.createElement("li");
+
+      notesList
+        .insertAdjacentElement("beforeend", newNote)
+        .classList.add("list-group-item");
+      newNote.insertAdjacentHTML("beforeend", data.noteContent);
     });
 });
 // });
