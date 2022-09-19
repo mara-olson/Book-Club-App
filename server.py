@@ -85,8 +85,10 @@ def save_book_notes(book_title):
     """Add and save user-entered notes."""
 
     book = Book.get_book_by_title(book_title)
+    data = request.json
+    notes = data.get("notes")
 
-    notes = request.json.get("notes")
+
     print(notes, "!!!!!!!!!!!!!!!")
 
 

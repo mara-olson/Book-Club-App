@@ -7,11 +7,14 @@ document.getElementById("notes-form").addEventListener("submit", function (s) {
 
   this.action = `/api/library/${book_title}/add-notes`;
 
-  const notes = this.value;
+  const formInputs = {
+    book_title: book_title,
+    notes: document.getElementById("entered-content-notes").value,
+  };
 
   fetch(`/api/library/${book_title}/add-notes`, {
     method: "POST",
-    body: JSON.stringify({ notes, book_title }),
+    body: JSON.stringify(formInputs),
     headers: {
       "Content-Type": "application/json",
     },
