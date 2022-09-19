@@ -1,5 +1,5 @@
-// const handleSubmit = () => {
-
+// document.querySelectorAll(".notes-text").forEach((item) => {
+//   item.
 document.getElementById("notes-form").addEventListener("submit", function (s) {
   s.preventDefault();
 
@@ -7,7 +7,7 @@ document.getElementById("notes-form").addEventListener("submit", function (s) {
 
   this.action = `/api/library/${book_title}/add-notes`;
 
-  const notes = document.getElementById("notes-form").innerText;
+  const notes = this.value;
 
   fetch(`/api/library/${book_title}/add-notes`, {
     method: "POST",
@@ -26,3 +26,4 @@ document.getElementById("notes-form").addEventListener("submit", function (s) {
       //   newBook.insertAdjacentHTML("beforeend", data.last_book.title);
     });
 });
+// });
