@@ -77,6 +77,9 @@ document.getElementById("notes-form").addEventListener("submit", function (s) {
       notesList
         .insertAdjacentElement("beforeend", newNote)
         .classList.add("list-group-item");
+
+      // .setAttribute("data-toggle", "modal")
+      // .setAttribute("data-target", "#delete-note-modal");
       newNote.insertAdjacentHTML("beforeend", data.noteContent);
     });
 });
