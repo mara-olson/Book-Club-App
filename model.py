@@ -30,6 +30,13 @@ class Book(db.Model):
         """Retrieve a book by its title."""
         return Book.query.filter(Book.title==title).first()
 
+    @classmethod
+    def delete_book(cls, book_title):
+        book = Note.query.get_book_by_title(book_title)
+
+        db.session.delete(book)
+        db.session.commit()
+
     def __repr__(self):
         return f'<Book id={self.book_id} title={self.title}'
 
@@ -54,6 +61,13 @@ class Note(db.Model):
         db.session.commit()
 
         return note
+
+    @classmethod
+    def delete_note(cls, note_id):
+        note = Note.query.get(note_id)
+
+        db.session.delete(note)
+        db.session.commit()
     
 
     def __repr__(self):

@@ -11,7 +11,7 @@ def create_book(title, author):
 
 def create_note(book, content):
     """Add a new book to the database."""
-    note = Note(book=book, conent=content)
+    note = Note(book=book, content=content)
 
     return note
 

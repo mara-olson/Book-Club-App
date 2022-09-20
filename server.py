@@ -37,7 +37,6 @@ def add_book():
 
     return jsonify({"bookTitle": new_book.title, "bookAuthor": new_book.author, "bookPubYr": new_book.year_published, "bookDateRead": new_book["date_read"][:10], "bookRating": new_book.rating})
 
-
 @app.route("/api/library")
 def all_books():
     """All book titles in database."""
@@ -80,6 +79,30 @@ def book_details(book_title):
     return render_template("book_details.html", title=book_title, author = book.author, published=book.year_published, read=date_read, rating=book.rating, notes=book.notes)
 
 
+@app.route("/api/library/<book_title>/all-notes")
+def all_notes(book_title):
+    """All notes for a given book."""
+    notes = []
+    book = Book.get_book_by_title(book_title)
+
+    all_notes = Note.query.filter(Note.book_id == book.book_id).all()
+
+    for note in all_notes:
+        print("*"*5,note)
+        new_note = {
+            "note_id": note.note_id, "content": note.content,
+            "category": note.category,
+            "quote": note.quote,
+        }
+        notes.append(new_note)
+
+    last_note = notes[-1]
+    print("LAST BOOK: ", last_note)
+
+    return jsonify({"notes": notes, "last_note": last_note})
+
+
+
 @app.route("/api/library/<book_title>/add-notes", methods=["POST"])
 def save_book_notes(book_title):
     """Add and save user-entered notes."""
@@ -91,6 +114,26 @@ def save_book_notes(book_title):
     new_note = Note.create_note(book, notes)
 
     return jsonify({"noteContent": new_note.content})
+
+
+@app.route("/api/library/<book_title>/remove", methods=["DELETE"])
+def delete_note(book_title):
+    """Add and save user-entered notes."""
+    note_content = request.json.get("content")
+
+    book = Book.get_book_by_title(book_title)
+
+    note = Note.query.filter(Note.content == note_content).all()
+
+    Note.delete_note(note.note_id)
+
+    print(f"Activity {note.note_id} deleted")
+
+    check_note = Note.query.filter(Note.content == note_content).all()
+
+    if not check_note:
+        return jsonify({
+        "success": True})
 
 
 
