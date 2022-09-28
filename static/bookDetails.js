@@ -77,38 +77,35 @@ document.getElementById("notes-form").addEventListener("submit", function (s) {
       notesList
         .insertAdjacentElement("beforeend", newNote)
         .classList.add("list-group-item");
-
-      // .setAttribute("data-toggle", "modal")
-      // .setAttribute("data-target", "#delete-note-modal");
+      // newNote.contentEditable = "true";
       newNote.insertAdjacentHTML("beforeend", data.noteContent);
     });
 });
 // });
 
-document.querySelector;
+// const handleDelete = (evt) => {
+//   evt.preventDefault();
 
-const handleDelete = (evt) => {
-  evt.preventDefault();
+//   const book_title = document.getElementById("book-title").innerHTML;
 
-  const book_title = document.getElementById("book-title").innerHTML;
+//   const content = evt.target.innerHTML;
 
-  const content = evt.target.innerHTML;
-
-  fetch(`/api/library/${book_title}/remove`, {
-    method: "DELETE",
-    credentials: "include",
-    body: JSON.stringify({
-      book_title: book_title,
-      content: content,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.success) {
-        console.log(data.reponse);
-      }
-    });
-};
+//   fetch(`/api/library/${book_title}/remove`, {
+//     method: "DELETE",
+//     credentials: "include",
+//     body: JSON.stringify({
+//       book_title: book_title,
+//       content: content,
+//     }),
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   })
+//     .then((response) => response.json())
+//     .then((data) => {
+//       console.log(data.success);
+//       if (data.success) {
+//         console.log(data.reponse);
+//       }
+//     });
+// };

@@ -116,24 +116,33 @@ def save_book_notes(book_title):
     return jsonify({"noteContent": new_note.content})
 
 
-@app.route("/api/library/<book_title>/remove", methods=["DELETE"])
+@app.route("/api/library/<book_title>", methods=["POST"])
 def delete_note(book_title):
-    """Add and save user-entered notes."""
-    note_content = request.json.get("content")
+    """Remove book from library."""
+    # note_content = request.json.get("content")
 
     book = Book.get_book_by_title(book_title)
+    print("*"*20)
 
-    note = Note.query.filter(Note.content == note_content).all()
+    # note = Note.query.filter(Note.content == note_content).all()
+    Book.delete_book(book.book_title)
 
-    Note.delete_note(note.note_id)
-
-    print(f"Activity {note.note_id} deleted")
-
-    check_note = Note.query.filter(Note.content == note_content).all()
-
-    if not check_note:
+    if not Book.get_book_by_title(book_title):
         return jsonify({
         "success": True})
+    else:
+        return jsonify({
+        "success": False})
+
+    # Note.delete_note(note.note_id)
+
+    # print(f"Activity {note.note_id} deleted")
+
+    # check_note = Note.query.filter(Note.content == note_content).all()
+
+    # if not check_note:
+    #     return jsonify({
+    #     "success": True})
 
 
 

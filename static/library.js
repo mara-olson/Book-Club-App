@@ -1,3 +1,29 @@
+const handleDelete = (evt) => {
+  evt.preventDefault();
+
+  const book_title = document.getElementById("book-title").innerHTML;
+
+  // const content = evt.target.innerHTML;
+
+  fetch(`/api/library/${book_title}`, {
+    method: "POST",
+    // credentials: "include",
+    // body: JSON.stringify({
+    //   book_title: book_title,
+    // }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data.success);
+      if (data.success) {
+        console.log(data.reponse);
+      }
+    });
+};
+
 const getBookList = () => {
   const bookTable = document.getElementById("book-table");
 
@@ -9,13 +35,27 @@ const getBookList = () => {
         bookTable.insertRow(-1);
         const newRow = bookTable.insertRow(-1);
 
+        const deleteBookButton = document.createElement("button");
+        const deleteIcon = document.createElement("i");
+        // deleteBookButton.innerHTML = "X";
+
+        deleteBookButton.addEventListener("click", function () {
+          console.log("clicked");
+        });
+
         const newTitleCell = newRow.insertCell(0);
         const newAuthorCell = newRow.insertCell(1);
         const newPubYearCell = newRow.insertCell(2);
         const newDateReadCell = newRow.insertCell(3);
         const newRatingCell = newRow.insertCell(4);
+        const deleteBookCell = newRow.insertCell(5);
 
         newTitleCell.innerHTML = data.books[book].title;
+        deleteBookCell.appendChild(deleteBookButton);
+        deleteBookButton.setAttribute("class", "btn btn-danger");
+        // deleteBookButton.setAttribute("class", "d-none");
+        deleteBookButton.appendChild(deleteIcon);
+        deleteIcon.setAttribute("class", "bi bi-trash-fill");
         newAuthorCell.innerHTML = data.books[book].author;
         newPubYearCell.innerHTML = data.books[book].year_published;
         // newDateReadCell.innerHTML = data.books[book].date_read;
@@ -97,7 +137,6 @@ document
 
 function addRowHandlers() {
   const rows = document.getElementById("book-table").rows;
-  console.log(rows);
   for (i = 0; i < rows.length; i++) {
     rows[i].onclick = (function () {
       return function () {
