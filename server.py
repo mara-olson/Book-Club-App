@@ -24,10 +24,10 @@ def add_book():
     """Add a new book to the database."""
     data = request.json
 
-    print("*"*20, data)
+    # print("*"*20, data)
 
     new_book_title = data.get("new_book_title")
-    print(new_book_title)
+    # print(new_book_title)
     new_book_author = data.get("new_book_author")
     new_book_year = data.get("new_book_year")
     new_book_date_read = data.get("new_book_date_read")
@@ -45,7 +45,7 @@ def all_books():
 
     all_books = Book.query.all()
     for book in all_books:
-        print("*"*5,book)
+        # print("*"*5,book)
         if book.title not in book_titles:
             new_book = {
                 "book_id": book.book_id, "title": book.title,
@@ -88,7 +88,7 @@ def all_notes(book_title):
     all_notes = Note.query.filter(Note.book_id == book.book_id).all()
 
     for note in all_notes:
-        print("*"*5,note)
+        # print("*"*5,note)
         new_note = {
             "note_id": note.note_id, "content": note.content,
             "category": note.category,
@@ -97,7 +97,7 @@ def all_notes(book_title):
         notes.append(new_note)
 
     last_note = notes[-1]
-    print("LAST BOOK: ", last_note)
+    print("LAST NOTE: ", last_note)
 
     return jsonify({"notes": notes, "last_note": last_note})
 
@@ -122,7 +122,7 @@ def delete_note(book_title):
     # note_content = request.json.get("content")
 
     book = Book.get_book_by_title(book_title)
-    print("*"*20)
+    print(book_title,"*"*20)
 
     # note = Note.query.filter(Note.content == note_content).all()
     Book.delete_book(book.book_title)

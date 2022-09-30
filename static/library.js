@@ -6,11 +6,11 @@ const handleDelete = (evt) => {
   // const content = evt.target.innerHTML;
 
   fetch(`/api/library/${book_title}`, {
-    method: "POST",
-    // credentials: "include",
-    // body: JSON.stringify({
-    //   book_title: book_title,
-    // }),
+    method: "DELETE",
+    credentials: "include",
+    body: JSON.stringify({
+      book_title: book_title,
+    }),
     headers: {
       "Content-Type": "application/json",
     },
@@ -18,9 +18,9 @@ const handleDelete = (evt) => {
     .then((response) => response.json())
     .then((data) => {
       console.log(data.success);
-      if (data.success) {
-        console.log(data.reponse);
-      }
+      // if (data.success) {
+      // console.log(data.reponse);
+      // }
     });
 };
 
@@ -51,6 +51,8 @@ const getBookList = () => {
         const deleteBookCell = newRow.insertCell(5);
 
         newTitleCell.innerHTML = data.books[book].title;
+        newTitleCell.setAttribute("id", data.books[book].title);
+        newTitleCell.setAttribute("class", "bookTitleCell");
         deleteBookCell.appendChild(deleteBookButton);
         deleteBookButton.setAttribute("class", "btn btn-danger");
         // deleteBookButton.setAttribute("class", "d-none");
@@ -136,11 +138,11 @@ document
   });
 
 function addRowHandlers() {
-  const rows = document.getElementById("book-table").rows;
+  const rows = document.getElementsByClassName("bookTitleCell");
   for (i = 0; i < rows.length; i++) {
     rows[i].onclick = (function () {
       return function () {
-        const id = this.cells[0].innerHTML;
+        const id = this.innerHTML;
         console.log(id);
         location.replace(`/library/${id}`);
       };
