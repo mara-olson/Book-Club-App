@@ -1,3 +1,4 @@
+# from asyncio.windows_events import NULL
 from flask import Flask, render_template, json, jsonify, request, flash, session, redirect;
 import os
 from model import connect_to_db, db, Book, Note
@@ -24,10 +25,10 @@ def add_book():
     """Add a new book to the database."""
     data = request.json
 
-    # print("*"*20, data)
+    print("*"*20, data)
 
     new_book_title = data.get("new_book_title")
-    # print(new_book_title)
+    # print(new_book_title, "*"*20)
     new_book_author = data.get("new_book_author")
     new_book_year = data.get("new_book_year")
     new_book_date_read = data.get("new_book_date_read")
@@ -35,7 +36,7 @@ def add_book():
 
     new_book = Book.create_book(title=new_book_title, author=new_book_author, year_published=new_book_year, date_read=new_book_date_read, rating=new_book_rating)
 
-    return jsonify({"bookTitle": new_book.title, "bookAuthor": new_book.author, "bookPubYr": new_book.year_published, "bookDateRead": new_book["date_read"][:10], "bookRating": new_book.rating})
+    return jsonify({"bookTitle": new_book.title, "bookAuthor": new_book.author, "bookPubYr": new_book.year_published, "bookDateRead": new_book.date_read, "bookRating": new_book.rating})
 
 @app.route("/api/library")
 def all_books():
@@ -44,6 +45,7 @@ def all_books():
     book_titles =[]
 
     all_books = Book.query.all()
+    # if all_books:
     for book in all_books:
         # print("*"*5,book)
         if book.title not in book_titles:
@@ -57,8 +59,11 @@ def all_books():
             book_titles.append(book.title)
             books.append(new_book)
 
-    last_book = books[-1]
-    print("LAST BOOK: ", last_book)
+    if all_books:
+        last_book = books[-1]
+        print("LAST BOOK: ", last_book)
+    else:
+        last_book = None
 
     return jsonify({"books": books, "last_book": last_book})
 
@@ -116,8 +121,8 @@ def save_book_notes(book_title):
     return jsonify({"noteContent": new_note.content})
 
 
-@app.route("/api/library/<book_title>", methods=["POST"])
-def delete_note(book_title):
+@app.route("/api/library/<book_title>", methods=["DELETE"])
+def delete_book(book_title):
     """Remove book from library."""
     # note_content = request.json.get("content")
 
@@ -125,7 +130,7 @@ def delete_note(book_title):
     print(book_title,"*"*20)
 
     # note = Note.query.filter(Note.content == note_content).all()
-    Book.delete_book(book.book_title)
+    Book.delete_book(book.title)
 
     if not Book.get_book_by_title(book_title):
         return jsonify({

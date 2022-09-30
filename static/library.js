@@ -1,29 +1,3 @@
-const handleDelete = (evt) => {
-  evt.preventDefault();
-
-  const book_title = document.getElementById("book-title").innerHTML;
-
-  // const content = evt.target.innerHTML;
-
-  fetch(`/api/library/${book_title}`, {
-    method: "DELETE",
-    credentials: "include",
-    body: JSON.stringify({
-      book_title: book_title,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data.success);
-      // if (data.success) {
-      // console.log(data.reponse);
-      // }
-    });
-};
-
 const getBookList = () => {
   const bookTable = document.getElementById("book-table");
 
@@ -39,9 +13,10 @@ const getBookList = () => {
         const deleteIcon = document.createElement("i");
         // deleteBookButton.innerHTML = "X";
 
-        deleteBookButton.addEventListener("click", function () {
-          console.log("clicked");
-        });
+        deleteBookButton.addEventListener(
+          "click",
+          handleDelete(data.books[book].title)
+        );
 
         const newTitleCell = newRow.insertCell(0);
         const newAuthorCell = newRow.insertCell(1);
@@ -149,3 +124,29 @@ function addRowHandlers() {
     })(rows[i]);
   }
 }
+
+const handleDelete = (book_title) => {
+  preventDefault();
+  //
+  // const book_title = document.getElementById("book-title").innerHTML;
+
+  // const content = evt.target.innerHTML;
+
+  fetch(`/api/library/${book_title}`, {
+    method: "DELETE",
+    credentials: "include",
+    body: JSON.stringify({
+      book_title: book_title,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data.success);
+      // if (data.success) {
+      // console.log(data.reponse);
+      // }
+    });
+};

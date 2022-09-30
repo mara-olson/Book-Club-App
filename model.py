@@ -32,7 +32,7 @@ class Book(db.Model):
 
     @classmethod
     def delete_book(cls, book_title):
-        book = Note.query.get_book_by_title(book_title)
+        book = Book.get_book_by_title(book_title)
 
         db.session.delete(book)
         db.session.commit()
