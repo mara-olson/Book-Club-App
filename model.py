@@ -20,6 +20,7 @@ class Book(db.Model):
     def create_book(cls, title, author, year_published=None, date_read=None, rating=None):
         """Add a new book to the database."""
         book = cls(title=title, author=author, year_published=year_published, date_read=date_read, rating=rating)
+        
         db.session.add(book)
         db.session.commit()
 

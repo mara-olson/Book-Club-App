@@ -34,7 +34,7 @@
         <ol class="list-group list-group-numbered" id="content-notes-list" data-toggle="modal" data-target="#delete-note-modal"></ol>
         <form method="post" id="notes-form" class="add-notes-form">
           <div class="form-group">
-            <label for="entered-content-notes" >Add notes</label>
+            <label for="entered-content-notes">Add notes</label>
             <textarea
               class="form-control"
               type="text"
@@ -46,6 +46,8 @@
           </div>
         </form>
       </div>
+      </div>
+      <!-- ^^ Added to try to fix missing other drop-downs -->
       <div
         class="fade modal"
         tabindex="-1"
@@ -64,7 +66,8 @@
                   data-dismiss="modal"
                   aria-label="Close"
                 >
-                  <span aria-hidden="true">&times;</span>
+                  <span aria-hidden="true"></span>
+                  <!-- ^^ NOTE: Weird "& times; removed" -->
                 </button>
               </div>
               <div class="modal-body">Modal</div>
@@ -106,10 +109,14 @@
             
           >
             <div class="card-body" id="quotes-notes-body">
-              <ul class="list-group list-group-flush" id="quotes-notes-list">
-                <li class="list-group-item" id="quotes-notes-item">Item 1</li>
-                <li class="list-group-item" id="quotes-notes-item">Item 2</li>
-              </ul>
+              {% if notes %}
+                <ul class="list-group list-group-flush" id="quotes-notes-list">
+                  {% for note in notes %}
+                  <li class="list-group-item" id="quotes-notes-item">{{ note }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+              <!-- NOTE: Adding Jinja for instead of js fxn to loop through notes -->
               <form method="post" id="quotes-form" class="add-notes-form">
                 <div class="form-group">
                   <label for="entered-quotes-notes" >Add notes</label>

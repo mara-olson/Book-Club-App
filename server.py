@@ -78,10 +78,12 @@ def library_page():
 def book_details(book_title):
     """Specific details about a particular book."""
     book = Book.get_book_by_title(book_title)
+    session['title'] = book.title
+
     date_read = str(book.date_read)[:10]
-    notes = Book.notes
+    notes = book.notes
     
-    return render_template("book_details.html", title=book_title, author = book.author, published=book.year_published, read=date_read, rating=book.rating, notes=book.notes)
+    return render_template("book_details.html", title=book.title, author = book.author, published=book.year_published, read=date_read, rating=book.rating, notes=notes)
 
 
 @app.route("/api/library/<book_title>/all-notes")
@@ -113,8 +115,8 @@ def save_book_notes(book_title):
     """Add and save user-entered notes."""
 
     book = Book.get_book_by_title(book_title)
-    data = request.json
-    notes = data.get("notes")
+
+    notes = request.json.get("notes")
 
     new_note = Note.create_note(book, notes)
 
@@ -122,17 +124,23 @@ def save_book_notes(book_title):
 
 
 @app.route("/api/library/<book_title>", methods=["DELETE"])
-def delete_book(book_title):
+def delete_book():
     """Remove book from library."""
     # note_content = request.json.get("content")
 
-    book = Book.get_book_by_title(book_title)
-    print(book_title,"*"*20)
+    book_title = session['title']
+    # NOTE: Needed? ^^
+    
+    # book = Book.get_book_by_title(book_title)
+    # print(book_title,"*"*20)
+    # NOTE: ^^ Replacing above with direct placement in delete_book argument
 
-    # note = Note.query.filter(Note.content == note_content).all()
-    Book.delete_book(book.title)
+    # Book.delete_book(Book.get_book_by_title(book_title))
+    Book.delete_book(session['title'])
+    # NOTE: seeing if session works
 
-    if not Book.get_book_by_title(book_title):
+    if not Book.get_book_by_title(session['title']):
+        print("DELETED: ", session["title"])
         return jsonify({
         "success": True})
     else:

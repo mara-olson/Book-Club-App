@@ -6,65 +6,84 @@ const getBookList = () => {
     .then((data) => {
       console.log(data.books);
       for (book in data.books) {
-        bookTable.insertRow(-1);
+        // bookTable.insertRow(-1);
+        // ^^NEEDED?
+
+        const bookTitle = data.books[book].title;
+
         const newRow = bookTable.insertRow(-1);
 
-        const deleteBookButton = document.createElement("button");
-        const deleteIcon = document.createElement("i");
-        // deleteBookButton.innerHTML = "X";
-
-        deleteBookButton.addEventListener(
-          "click",
-          handleDelete(data.books[book].title)
-        );
-
         const newTitleCell = newRow.insertCell(0);
-        const newAuthorCell = newRow.insertCell(1);
-        const newPubYearCell = newRow.insertCell(2);
-        const newDateReadCell = newRow.insertCell(3);
-        const newRatingCell = newRow.insertCell(4);
-        const deleteBookCell = newRow.insertCell(5);
-
-        newTitleCell.innerHTML = data.books[book].title;
+        newTitleCell.innerHTML = bookTitle;
         newTitleCell.setAttribute("id", data.books[book].title);
         newTitleCell.setAttribute("class", "bookTitleCell");
-        deleteBookCell.appendChild(deleteBookButton);
-        deleteBookButton.setAttribute("class", "btn btn-danger");
-        // deleteBookButton.setAttribute("class", "d-none");
-        deleteBookButton.appendChild(deleteIcon);
-        deleteIcon.setAttribute("class", "bi bi-trash-fill");
+
+        const newAuthorCell = newRow.insertCell(1);
         newAuthorCell.innerHTML = data.books[book].author;
+
+        const newPubYearCell = newRow.insertCell(2);
         newPubYearCell.innerHTML = data.books[book].year_published;
-        // newDateReadCell.innerHTML = data.books[book].date_read;
+
+        const newDateReadCell = newRow.insertCell(3);
         const formattedDateRead = new Date(data.books[book].date_read)
           .toISOString()
           .substring(0, 10);
         newDateReadCell.innerHTML = formattedDateRead;
+
+        const newRatingCell = newRow.insertCell(4);
         newRatingCell.innerHTML = data.books[book].rating;
 
-        // console.log(data.books[book].title);
-        // bookTable
-        //   .insertAdjacentElement("beforeend", newBook)
-        //   .classList.add("list-group-item");
-
-        // newBook.insertAdjacentHTML("beforeend", data.books[book].title);
+        const deleteBookCell = newRow.insertCell(5);
+        const deleteBookButton = document.createElement("button");
+        const deleteIcon = document.createElement("i");
+        deleteBookCell.appendChild(deleteBookButton);
+        deleteBookButton.setAttribute("class", "btn btn-danger");
+        deleteBookButton.appendChild(deleteIcon);
+        deleteIcon.setAttribute("class", "bi bi-trash-fill");
+        deleteBookButton.addEventListener("click", handleDelete(bookTitle));
       }
       addRowHandlers();
     });
 };
 
 const getLastBook = () => {
-  const bookList = document.getElementById("book-list");
+  const bookTable = document.getElementById("book-table");
 
   fetch("/api/library")
     .then((response) => response.json())
     .then((data) => {
-      const newBook = document.createElement("li");
-      console.log(data.last_book.title);
-      bookList
-        .insertAdjacentElement("beforeend", newBook)
-        .classList.add("list-group-item");
-      newBook.insertAdjacentHTML("beforeend", data.last_book.title);
+      // NOTE: Replaced adding item to book-list with adding row to book table
+      const newRow = bookTable.insertRow(-1);
+      const newTitleCell = newRow.insertCell(0);
+      newTitleCell.innerHTML = bookTitle;
+      newTitleCell.setAttribute("id", data.books[book].title);
+      newTitleCell.setAttribute("class", "bookTitleCell");
+
+      const newAuthorCell = newRow.insertCell(1);
+      newAuthorCell.innerHTML = data.books[book].author;
+
+      const newPubYearCell = newRow.insertCell(2);
+      newPubYearCell.innerHTML = data.books[book].year_published;
+
+      const newDateReadCell = newRow.insertCell(3);
+      const formattedDateRead = new Date(data.books[book].date_read)
+        .toISOString()
+        .substring(0, 10);
+      newDateReadCell.innerHTML = formattedDateRead;
+
+      const newRatingCell = newRow.insertCell(4);
+      newRatingCell.innerHTML = data.books[book].rating;
+
+      const deleteBookCell = newRow.insertCell(5);
+      const deleteBookButton = document.createElement("button");
+      const deleteIcon = document.createElement("i");
+      deleteBookCell.appendChild(deleteBookButton);
+      deleteBookButton.setAttribute("class", "btn btn-danger");
+      deleteBookButton.appendChild(deleteIcon);
+      deleteIcon.setAttribute("class", "bi bi-trash-fill");
+      deleteBookButton.addEventListener("click", handleDelete(bookTitle));
+
+      addRowHandlers();
     });
 };
 
@@ -96,7 +115,7 @@ document
       new_book_date_read: document.getElementById("add-date-read").value,
       new_book_rating: document.getElementById("add-rating").value,
     };
-    console.log(newBookInputs);
+    // console.log(newBookInputs);
 
     fetch("/api/add-book", {
       method: "POST",
@@ -113,30 +132,30 @@ document
   });
 
 function addRowHandlers() {
-  const rows = document.getElementsByClassName("bookTitleCell");
-  for (i = 0; i < rows.length; i++) {
-    rows[i].onclick = (function () {
+  const titles = document.getElementsByClassName("bookTitleCell");
+  for (i = 0; i < titles.length; i++) {
+    titles[i].onclick = (function () {
       return function () {
-        const id = this.innerHTML;
-        console.log(id);
-        location.replace(`/library/${id}`);
+        const title = this.innerHTML;
+        console.log(title);
+        location.replace(`/library/${title}`);
       };
-    })(rows[i]);
+    })(titles[i]);
   }
 }
 
-const handleDelete = (book_title) => {
-  preventDefault();
+const handleDelete = (evt) => {
+  preventDefault(evt);
   //
   // const book_title = document.getElementById("book-title").innerHTML;
 
   // const content = evt.target.innerHTML;
 
-  fetch(`/api/library/${book_title}`, {
+  fetch(`/api/library/${session["title"]}`, {
     method: "DELETE",
     credentials: "include",
     body: JSON.stringify({
-      book_title: book_title,
+      book_title: session["title"],
     }),
     headers: {
       "Content-Type": "application/json",
