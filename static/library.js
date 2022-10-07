@@ -6,7 +6,7 @@ const getBookList = () => {
     .then((response) => response.json())
     .then((data) => {
       for (let i = 0; i < data.books.length; i++) {
-        console.log(i);
+        // console.log(i);
         const newRow = bookTable.insertRow(-1);
 
         const bookTitle = data.books[i].title;
@@ -44,6 +44,28 @@ const getBookList = () => {
         const deleteIcon = document.createElement("i");
         deleteBookButton.appendChild(deleteIcon);
         deleteIcon.setAttribute("class", "bi bi-trash-fill");
+        deleteBookButton.addEventListener("click", (evt) => {
+          fetch(`/api/library/${bookTitle}`, {
+            method: "DELETE",
+            credentials: "include",
+            body: JSON.stringify({
+              book_title: bookTitle,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              getBookList();
+              console.log(data.success);
+              // if (data.success) {
+              // console.log(data.reponse);
+              // }
+            });
+
+          // addRowHandlers();
+        });
         // deleteBookButton.onclick(handleDelete(bookTitle));
       }
     });
@@ -112,45 +134,48 @@ window.addEventListener("load", () => {
   getBookList();
 });
 
-document
-  .getElementById("submit-new-book-btn")
-  .addEventListener("click", (evt) => {
-    evt.preventDefault();
+const clickFunction = () => {
+  console.log("clicked add btn");
+};
 
-    // const queryString = new URLSearchParams({
-    //   new_book_title: document.getElementById("add-title").value,
-    //   new_book_author: document.getElementById("add-author").value,
-    //   new_book_year: document.getElementById("add-year").value,
-    //   new_book_date_read: document.getElementById("add-date-read").value,
-    //   new_book_rating: document.getElementById("add-rating").value,
-    // }).toString();
+document.getElementById("submit-new-book-btn").addEventListener("click", () => {
+  // evt.preventDefault();
+  console.log("clicked add btn");
 
-    // console.log(queryString);
+  // const queryString = new URLSearchParams({
+  //   new_book_title: document.getElementById("add-title").value,
+  //   new_book_author: document.getElementById("add-author").value,
+  //   new_book_year: document.getElementById("add-year").value,
+  //   new_book_date_read: document.getElementById("add-date-read").value,
+  //   new_book_rating: document.getElementById("add-rating").value,
+  // }).toString();
 
-    // const url = `/api/add-book?${queryString}`;
+  // console.log(queryString);
 
-    const newBookInputs = {
-      new_book_title: document.getElementById("add-title").value,
-      new_book_author: document.getElementById("add-author").value,
-      new_book_year: document.getElementById("add-year").value,
-      new_book_date_read: document.getElementById("add-date-read").value,
-      new_book_rating: document.getElementById("add-rating").value,
-    };
-    // console.log(newBookInputs);
+  // const url = `/api/add-book?${queryString}`;
 
-    fetch("/api/add-book", {
-      method: "POST",
-      body: JSON.stringify(newBookInputs),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        getLastBook();
-        console.log(data.bookTitle);
-      });
-  });
+  const newBookInputs = {
+    new_book_title: document.getElementById("add-title").value,
+    new_book_author: document.getElementById("add-author").value,
+    new_book_year: document.getElementById("add-year").value,
+    new_book_date_read: document.getElementById("add-date-read").value,
+    new_book_rating: document.getElementById("add-rating").value,
+  };
+  // console.log(newBookInputs);
+
+  fetch("/api/add-book", {
+    method: "POST",
+    body: JSON.stringify(newBookInputs),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      getLastBook();
+      console.log(data.bookTitle);
+    });
+});
 
 // function addRowHandlers() {
 //   const titles = document.getElementsByClassName("bookTitleCell");

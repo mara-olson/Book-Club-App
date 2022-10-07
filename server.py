@@ -126,11 +126,11 @@ def save_book_notes(book_title):
 
 
 @app.route("/api/library/<book_title>", methods=["DELETE"])
-def delete_book():
+def delete_book(book_title):
     """Remove book from library."""
     # note_content = request.json.get("content")
 
-    book_title = session['title']
+    book_title = request.json.get("book_title")
     # NOTE: Needed? ^^
     
     # book = Book.get_book_by_title(book_title)
@@ -138,11 +138,11 @@ def delete_book():
     # NOTE: ^^ Replacing above with direct placement in delete_book argument
 
     # Book.delete_book(Book.get_book_by_title(book_title))
-    Book.delete_book(session['title'])
+    Book.delete_book(book_title)
     # NOTE: seeing if session works
 
-    if not Book.get_book_by_title(session['title']):
-        print("DELETED: ", session["title"])
+    if not Book.get_book_by_title(book_title):
+        print("DELETED: ", book_title)
         return jsonify({
         "success": True})
     else:
