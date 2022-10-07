@@ -120,25 +120,34 @@ def save_book_notes(book_title):
 
     notes = request.json.get("notes")
 
+    category = request.json.get("category")
+
     new_note = Note.create_note(book, notes)
+
+    new_note.category = category
+
+    db.session.commit()
 
     return jsonify({"noteContent": new_note.content, "noteId": new_note.note_id})
 
 
 @app.route("/api/library/<book_title>/all-notes", methods=["POST"])
-def edit_note():
+def edit_note(book_title):
     """Edit and save user-entered notes."""
+    
 
-    # book = Book.get_book_by_title(book_title)
+    book_title = request.json.get("book_title") 
 
     note_id = request.json.get("note_id")
     note_content = request.json.get("note_content")
     note_category = request.json.get("category")
 
-    note_to_edit = Note.query.filter(Note.note_id == note_id)
+    note_to_edit = Note.query.filter(Note.note_id == note_id).first()
 
     note_to_edit.content = note_content
     note_to_edit.category = note_category
+
+    print("EDITING: ", note_to_edit.note_id, "*"*20)
 
     db.session.commit()
 

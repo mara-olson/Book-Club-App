@@ -16,6 +16,9 @@ content %}
         </thead>
       </table>
     </div>
+    <button type="button" class="btn btn-primary" id="add-book-btn" data-toggle="modal" data-target="#add-book-modal" onclick="clickFunction()">
+    Add a book
+  </button>
   </div>
   <div class="fade modal" tabindex="-1" role="dialog" id="add-book-modal" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -90,9 +93,7 @@ content %}
   </div>
   
 
-  <button type="button" class="btn btn-primary" id="add-book-btn" data-toggle="modal" data-target="#add-book-modal" onclick="clickFunction()">
-    Add a book
-  </button>
+  
 
   {% endblock %}
 </body>

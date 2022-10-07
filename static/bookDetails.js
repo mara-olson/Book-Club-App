@@ -10,25 +10,33 @@ const getNoteList = () => {
   fetch(`/api/library/${book_title}/all-notes`)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data.notes);
+      // console.log(data.notes);
       for (note in data.notes) {
         const newNote = document.createElement("li");
-
-        console.log(data.notes[note].content);
-        if (data.notes[note].category == "content") {
+        const editNoteBtn = document.createElement("i");
+        editNoteBtn.setAttribute("class", "bi bi-pencil-square");
+        // console.log(data.notes[note].content);
+        if (
+          data.notes[note].content != 0 &&
+          data.notes[note].category == "content"
+        ) {
           contentNoteList
             .insertAdjacentElement("beforeend", newNote)
             .classList.add("list-group-item");
+
           newNote.setAttribute("id", data.notes[note].note_id);
           newNote.insertAdjacentHTML("beforeend", data.notes[note].content);
+          newNote.appendChild(editNoteBtn);
 
-          newNote.addEventListener("click", (evt) => {
-            newNote.setAttribute("editable", "true");
+          newNote.addEventListener("submit", (evt) => {
+            evt.preventDefault();
+
+            newNote.setAttribute("contenteditable", "true");
 
             const editedNoteContent = {
               book_title: book_title,
               note_id: newNote.id,
-              note_content: newNote.value,
+              note_content: newNote.innerHTML,
               category: "content",
             };
 
@@ -52,7 +60,7 @@ const getNoteList = () => {
           newNote.insertAdjacentHTML("beforeend", data.notes[note].content);
 
           newNote.addEventListener("click", (evt) => {
-            newNote.setAttribute("editable", "true");
+            newNote.setAttribute("contenteditable", "true");
 
             const editedNoteContent = {
               book_title: book_title,
@@ -81,7 +89,7 @@ const getNoteList = () => {
           newNote.insertAdjacentHTML("beforeend", data.notes[note].content);
 
           newNote.addEventListener("click", (evt) => {
-            newNote.setAttribute("editable", "true");
+            newNote.setAttribute("contenteditable", "true");
 
             const editedNoteContent = {
               book_title: book_title,
@@ -121,6 +129,7 @@ document.getElementById("notes-form").addEventListener("submit", function (s) {
   const formInputs = {
     book_title: book_title,
     notes: document.getElementById("entered-content-notes").value,
+    category: "content",
   };
 
   const notesList = document.getElementById("content-notes-list");

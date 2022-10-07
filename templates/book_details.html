@@ -31,7 +31,7 @@
       data-parent="#accordion"
     >
       <div class="card-body" id="content-notes-body">
-        <ol class="list-group list-group-numbered" id="content-notes-list" data-toggle="modal" data-target="#delete-note-modal"></ol>
+        <ul id="content-notes-list" data-toggle="modal" data-target="#edit-note-modal"></ul>
         <form method="post" id="notes-form" class="add-notes-form">
           <div class="form-group">
             <label for="entered-content-notes">Add notes</label>
@@ -48,16 +48,15 @@
       </div>
       </div>
       <div
-        class="fade modal"
+        class="modal"
         tabindex="-1"
         role="dialog"
-        id="delete-note-modal"
+        id="edit-note-modal"
         aria-hidden="true"
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
                 
                 <button
                   type="button"
@@ -68,7 +67,21 @@
                   <span aria-hidden="true"></span>
                 </button>
               </div>
-              <div class="modal-body">Modal</div>
+              <div class="modal-body">
+                <form method="post" id="edit-notes-form" class="edit-notes-form">
+                  <div class="form-group">
+                    <label for="edit-content-notes">Edit notes</label>
+                    <textarea
+                      class="form-control"
+                      type="text"
+                      id="edit-content-notes"
+                      value="getNoteContent()"
+                      rows="4"
+                    ></textarea>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </div>
+                </form>
+              </div>
             
             <div class="modal-footer">
                 <button
