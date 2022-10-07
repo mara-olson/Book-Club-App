@@ -63,7 +63,7 @@ def all_books():
 
     if all_books:
         last_book = books[-1]
-        print("LAST BOOK: ", last_book)
+        print("LAST BOOK: ", last_book["title"])
     else:
         last_book = None
 

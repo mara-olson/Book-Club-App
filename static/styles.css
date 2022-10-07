@@ -23,7 +23,7 @@ td {
   cursor: pointer;
 }
 
-td {
+.table td {
   vertical-align: middle;
 }
 

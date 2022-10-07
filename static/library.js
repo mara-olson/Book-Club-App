@@ -1,55 +1,50 @@
 const getBookList = () => {
+  // evt.preventDefault();
   const bookTable = document.getElementById("book-table");
 
   fetch("/api/library")
     .then((response) => response.json())
     .then((data) => {
-      console.log(data.books);
-      for (book in data.books) {
-        // bookTable.insertRow(-1);
-        // ^^NEEDED?
-
-        const bookTitle = data.books[book].title;
-
-        // const redirectToBookDetails = (evt) => {
-        //   evt.preventDefault();
-        //   location.replace(`/library/${bookTitle}`)
-        // }
-
+      for (let i = 0; i < data.books.length; i++) {
+        console.log(i);
         const newRow = bookTable.insertRow(-1);
+
+        const bookTitle = data.books[i].title;
 
         const newTitleCell = newRow.insertCell(0);
         newTitleCell.innerHTML = bookTitle;
-        newTitleCell.setAttribute("id", data.books[book].title);
-        newTitleCell.setAttribute("class", "bookTitleCell");
-        newTitleCell.addEventListener("click", (evt) => {
-          evt.preventDefault();
-          location.replace(`/library/${bookTitle}`);
-        });
+        // newTitleCell.setAttribute("id", data.books[i].title);
+        // newTitleCell.setAttribute("class", "bookTitleCell");
+        // newTitleCell.addEventListener("click", (evt) => {
+        //   evt.preventDefault();
+        //   location.replace(`/library/${bookTitle}`);
+        // });
 
         const newAuthorCell = newRow.insertCell(1);
-        newAuthorCell.innerHTML = data.books[book].author;
+        newAuthorCell.innerHTML = data.books[i].author;
 
         const newPubYearCell = newRow.insertCell(2);
-        newPubYearCell.innerHTML = data.books[book].year_published;
+        newPubYearCell.innerHTML = data.books[i].year_published;
 
         const newDateReadCell = newRow.insertCell(3);
-        const formattedDateRead = new Date(data.books[book].date_read)
+        const formattedDateRead = new Date(data.books[i].date_read)
           .toISOString()
           .substring(0, 10);
         newDateReadCell.innerHTML = formattedDateRead;
 
         const newRatingCell = newRow.insertCell(4);
-        newRatingCell.innerHTML = data.books[book].rating;
+        newRatingCell.innerHTML = data.books[i].rating;
 
         const deleteBookCell = newRow.insertCell(5);
         const deleteBookButton = document.createElement("button");
-        const deleteIcon = document.createElement("i");
+
         deleteBookCell.appendChild(deleteBookButton);
         deleteBookButton.setAttribute("class", "btn btn-danger");
+
+        const deleteIcon = document.createElement("i");
         deleteBookButton.appendChild(deleteIcon);
         deleteIcon.setAttribute("class", "bi bi-trash-fill");
-        deleteBookButton.addEventListener("click", handleDelete(bookTitle));
+        deleteBookButton.onclick(handleDelete(bookTitle));
       }
       // addRowHandlers();
     });
@@ -63,25 +58,25 @@ const getLastBook = () => {
     .then((data) => {
       // NOTE: Replaced adding item to book-list with adding row to book table
       const newRow = bookTable.insertRow(-1);
-      const newTitleCell = newRow.insertCell(0);
-      newTitleCell.innerHTML = bookTitle;
-      newTitleCell.setAttribute("id", data.books[book].title);
+      const newTitleCell = newRow[0];
+      newTitleCell.innerHTML = last_book.title;
+      newTitleCell.setAttribute("id", data.last_book.title);
       newTitleCell.setAttribute("class", "bookTitleCell");
 
       const newAuthorCell = newRow.insertCell(1);
-      newAuthorCell.innerHTML = data.books[book].author;
+      newAuthorCell.innerHTML = data.last_book.author;
 
       const newPubYearCell = newRow.insertCell(2);
-      newPubYearCell.innerHTML = data.books[book].year_published;
+      newPubYearCell.innerHTML = data.last_book.year_published;
 
       const newDateReadCell = newRow.insertCell(3);
-      const formattedDateRead = new Date(data.books[book].date_read)
+      const formattedDateRead = new Date(data.last_book.date_read)
         .toISOString()
         .substring(0, 10);
       newDateReadCell.innerHTML = formattedDateRead;
 
       const newRatingCell = newRow.insertCell(4);
-      newRatingCell.innerHTML = data.books[book].rating;
+      newRatingCell.innerHTML = data.last_book.rating;
 
       const deleteBookCell = newRow.insertCell(5);
       const deleteBookButton = document.createElement("button");
@@ -96,7 +91,7 @@ const getLastBook = () => {
     });
 };
 
-window.addEventListener("load", (evt) => {
+window.addEventListener("load", () => {
   getBookList();
 });
 
@@ -140,43 +135,43 @@ document
       });
   });
 
-function addRowHandlers() {
-  const titles = document.getElementsByClassName("bookTitleCell");
-  console.log(titles);
+// function addRowHandlers() {
+//   const titles = document.getElementsByClassName("bookTitleCell");
+//   console.log(titles);
 
-  // const allTitles = [];
+//   // const allTitles = [];
 
-  // for (const title in titles.item()) {
-  //   allTitles.push(title);
-  // }
+//   // for (const title in titles.item()) {
+//   //   allTitles.push(title);
+//   // }
 
-  // console.log("Titles: ", allTitles);
+//   // console.log("Titles: ", allTitles);
 
-  for (let i = 0; i < titles.length; i++) {
-    console.log(titles.item(i));
-    titles.item(i).onclick = (function () {
-      return function (evt) {
-        evt.preventDefault();
-        const title = this.innerHTML;
-        console.log(title);
-        location.replace(`/library/${title}`);
-      };
-    })(titles.item(i));
-  }
-}
+//   for (let i = 0; i < titles.length; i++) {
+//     console.log(titles.item(i));
+//     titles.item(i).onclick = (function () {
+//       return function (evt) {
+//         evt.preventDefault();
+//         const title = this.innerHTML;
+//         console.log(title);
+//         location.replace(`/library/${title}`);
+//       };
+//     })(titles.item(i));
+//   }
+// }
 
-const handleDelete = (evt) => {
-  preventDefault(evt);
+const handleDelete = () => {
+  // preventDefault(evt);
   //
-  // const book_title = document.getElementById("book-title").innerHTML;
+  const book_title = document.getElementById("book-title").innerHTML;
 
   // const content = evt.target.innerHTML;
 
-  fetch(`/api/library/${session["title"]}`, {
+  fetch(`/api/library/${book_title}`, {
     method: "DELETE",
     credentials: "include",
     body: JSON.stringify({
-      book_title: session["title"],
+      book_title: book_title,
     }),
     headers: {
       "Content-Type": "application/json",
