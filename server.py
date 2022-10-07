@@ -59,6 +59,8 @@ def all_books():
             book_titles.append(book.title)
             books.append(new_book)
 
+    session["all_titles"] = book_titles
+
     if all_books:
         last_book = books[-1]
         print("LAST BOOK: ", last_book)

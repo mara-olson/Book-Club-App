@@ -18,3 +18,16 @@ td {
   line-height: 15px;
   margin: 15px 0;
 }
+
+.bookTitleCell {
+  cursor: pointer;
+}
+
+td {
+  vertical-align: middle;
+}
+
+.bookTitleCell:hover {
+  cursor: pointer;
+  color: blue;
+}

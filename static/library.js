@@ -11,12 +11,21 @@ const getBookList = () => {
 
         const bookTitle = data.books[book].title;
 
+        // const redirectToBookDetails = (evt) => {
+        //   evt.preventDefault();
+        //   location.replace(`/library/${bookTitle}`)
+        // }
+
         const newRow = bookTable.insertRow(-1);
 
         const newTitleCell = newRow.insertCell(0);
         newTitleCell.innerHTML = bookTitle;
         newTitleCell.setAttribute("id", data.books[book].title);
         newTitleCell.setAttribute("class", "bookTitleCell");
+        newTitleCell.addEventListener("click", (evt) => {
+          evt.preventDefault();
+          location.replace(`/library/${bookTitle}`);
+        });
 
         const newAuthorCell = newRow.insertCell(1);
         newAuthorCell.innerHTML = data.books[book].author;
@@ -42,7 +51,7 @@ const getBookList = () => {
         deleteIcon.setAttribute("class", "bi bi-trash-fill");
         deleteBookButton.addEventListener("click", handleDelete(bookTitle));
       }
-      addRowHandlers();
+      // addRowHandlers();
     });
 };
 
@@ -83,7 +92,7 @@ const getLastBook = () => {
       deleteIcon.setAttribute("class", "bi bi-trash-fill");
       deleteBookButton.addEventListener("click", handleDelete(bookTitle));
 
-      addRowHandlers();
+      // addRowHandlers();
     });
 };
 
@@ -133,14 +142,26 @@ document
 
 function addRowHandlers() {
   const titles = document.getElementsByClassName("bookTitleCell");
-  for (i = 0; i < titles.length; i++) {
-    titles[i].onclick = (function () {
-      return function () {
+  console.log(titles);
+
+  // const allTitles = [];
+
+  // for (const title in titles.item()) {
+  //   allTitles.push(title);
+  // }
+
+  // console.log("Titles: ", allTitles);
+
+  for (let i = 0; i < titles.length; i++) {
+    console.log(titles.item(i));
+    titles.item(i).onclick = (function () {
+      return function (evt) {
+        evt.preventDefault();
         const title = this.innerHTML;
         console.log(title);
         location.replace(`/library/${title}`);
       };
-    })(titles[i]);
+    })(titles.item(i));
   }
 }
 
