@@ -13,12 +13,12 @@ const getBookList = () => {
 
         const newTitleCell = newRow.insertCell(0);
         newTitleCell.innerHTML = bookTitle;
-        // newTitleCell.setAttribute("id", data.books[i].title);
-        // newTitleCell.setAttribute("class", "bookTitleCell");
-        // newTitleCell.addEventListener("click", (evt) => {
-        //   evt.preventDefault();
-        //   location.replace(`/library/${bookTitle}`);
-        // });
+        newTitleCell.setAttribute("id", data.books[i].title);
+        newTitleCell.setAttribute("class", "bookTitleCell");
+        newTitleCell.addEventListener("click", (evt) => {
+          evt.preventDefault();
+          location.replace(`/library/${bookTitle}`);
+        });
 
         const newAuthorCell = newRow.insertCell(1);
         newAuthorCell.innerHTML = data.books[i].author;
@@ -44,9 +44,8 @@ const getBookList = () => {
         const deleteIcon = document.createElement("i");
         deleteBookButton.appendChild(deleteIcon);
         deleteIcon.setAttribute("class", "bi bi-trash-fill");
-        deleteBookButton.onclick(handleDelete(bookTitle));
+        // deleteBookButton.onclick(handleDelete(bookTitle));
       }
-      // addRowHandlers();
     });
 };
 
@@ -85,9 +84,27 @@ const getLastBook = () => {
       deleteBookButton.setAttribute("class", "btn btn-danger");
       deleteBookButton.appendChild(deleteIcon);
       deleteIcon.setAttribute("class", "bi bi-trash-fill");
-      deleteBookButton.addEventListener("click", handleDelete(bookTitle));
+      deleteBookButton.addEventListener("click", (evt) => {
+        fetch(`/api/library/${bookTitle}`, {
+          method: "DELETE",
+          credentials: "include",
+          body: JSON.stringify({
+            book_title: bookTitle,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data.success);
+            // if (data.success) {
+            // console.log(data.reponse);
+            // }
+          });
 
-      // addRowHandlers();
+        // addRowHandlers();
+      });
     });
 };
 
@@ -160,28 +177,32 @@ document
 //   }
 // }
 
-const handleDelete = () => {
-  // preventDefault(evt);
-  //
-  const book_title = document.getElementById("book-title").innerHTML;
+// const handleDelete = (evt) => {
+//   // preventDefault(evt);
+//   const bookTable = document.getElementById("book-table");
+//   const rowId = evt.target.parentNode.parentNode.id;
+//   // bookTable.row(evt.target).data();
+//   console.log(rowId);
+//   const bookTitle = rowId;
+//   console
+//     .log(bookTitle)
+//     // const content = evt.target.innerHTML;
 
-  // const content = evt.target.innerHTML;
-
-  fetch(`/api/library/${book_title}`, {
-    method: "DELETE",
-    credentials: "include",
-    body: JSON.stringify({
-      book_title: book_title,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data.success);
-      // if (data.success) {
-      // console.log(data.reponse);
-      // }
-    });
-};
+//     fetch(`/api/library/${bookTitle}`, {
+//       method: "DELETE",
+//       credentials: "include",
+//       body: JSON.stringify({
+//         book_title: bookTitle,
+//       }),
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     })
+//     .then((response) => response.json())
+//     .then((data) => {
+//       console.log(data.success);
+//       // if (data.success) {
+//       // console.log(data.reponse);
+//       // }
+//     });
+// };
