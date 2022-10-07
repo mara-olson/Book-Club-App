@@ -1,21 +1,108 @@
 const getNoteList = () => {
   const book_title = document.getElementById("book-title").innerHTML;
 
-  const noteList = document.getElementById("content-notes-list");
+  const contentNoteList = document.getElementById("content-notes-list");
+
+  const quoteList = document.getElementById("quotes-notes-list");
+
+  const vocabList = document.getElementById("vocab-notes-list");
 
   fetch(`/api/library/${book_title}/all-notes`)
     .then((response) => response.json())
     .then((data) => {
       console.log(data.notes);
       for (note in data.notes) {
-        // noteList.append("<li>New Note<li>");
         const newNote = document.createElement("li");
 
         console.log(data.notes[note].content);
-        noteList
-          .insertAdjacentElement("beforeend", newNote)
-          .classList.add("list-group-item");
-        newNote.insertAdjacentHTML("beforeend", data.notes[note].content);
+        if (data.notes[note].category == "content") {
+          contentNoteList
+            .insertAdjacentElement("beforeend", newNote)
+            .classList.add("list-group-item");
+          newNote.setAttribute("id", data.notes[note].note_id);
+          newNote.insertAdjacentHTML("beforeend", data.notes[note].content);
+
+          newNote.addEventListener("click", (evt) => {
+            newNote.setAttribute("editable", "true");
+
+            const editedNoteContent = {
+              book_title: book_title,
+              note_id: newNote.id,
+              note_content: newNote.value,
+              category: "content",
+            };
+
+            fetch(`/api/library/${book_title}/all-notes`, {
+              method: "POST",
+              body: JSON.stringify(editedNoteContent),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                getNoteList();
+              });
+          });
+        } else if (data.notes[note].category == "quote") {
+          quoteList
+            .insertAdjacentElement("beforeend", newNote)
+            .classList.add("list-group-item");
+          newNote.setAttribute("id", data.notes[note].note_id);
+          newNote.insertAdjacentHTML("beforeend", data.notes[note].content);
+
+          newNote.addEventListener("click", (evt) => {
+            newNote.setAttribute("editable", "true");
+
+            const editedNoteContent = {
+              book_title: book_title,
+              note_id: newNote.id,
+              note_content: newNote.value,
+              category: "quote",
+            };
+
+            fetch(`/api/library/${book_title}/all-notes`, {
+              method: "POST",
+              body: JSON.stringify(editedNoteContent),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                getNoteList();
+              });
+          });
+        } else if (data.notes[note].category == "vocab") {
+          vocabList
+            .insertAdjacentElement("beforeend", newNote)
+            .classList.add("list-group-item");
+          newNote.setAttribute("id", data.notes[note].note_id);
+          newNote.insertAdjacentHTML("beforeend", data.notes[note].content);
+
+          newNote.addEventListener("click", (evt) => {
+            newNote.setAttribute("editable", "true");
+
+            const editedNoteContent = {
+              book_title: book_title,
+              note_id: newNote.id,
+              note_content: newNote.value,
+              category: "quote",
+            };
+
+            fetch(`/api/library/${book_title}/all-notes`, {
+              method: "POST",
+              body: JSON.stringify(editedNoteContent),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                getNoteList();
+              });
+          });
+        }
       }
     });
 };
@@ -23,30 +110,7 @@ const getNoteList = () => {
 window.addEventListener("load", () => {
   getNoteList();
 });
-//   const newRow = noteList.insertRow(-1);
 
-//   const newTitleCell = newRow.insertCell(0);
-//   const newAuthorCell = newRow.insertCell(1);
-//   const newPubYearCell = newRow.insertCell(2);
-//   const newDateReadCell = newRow.insertCell(3);
-//   const newRatingCell = newRow.insertCell(4);
-
-//   newTitleCell.innerHTML = data.books[book].title;
-//   newAuthorCell.innerHTML = data.books[book].author;
-//   newPubYearCell.innerHTML = data.books[book].year_published;
-//   // newDateReadCell.innerHTML = data.books[book].date_read;
-//   const formattedDateRead = new Date(data.books[book].date_read)
-//     .toISOString()
-//     .substring(0, 10);
-//   newDateReadCell.innerHTML = formattedDateRead;
-//   newRatingCell.innerHTML = data.books[book].rating;
-// }
-// addRowHandlers();
-// });
-// };
-
-// document.querySelectorAll(".notes-text").forEach((item) => {
-//   item.
 document.getElementById("notes-form").addEventListener("submit", function (s) {
   s.preventDefault();
 
@@ -77,10 +141,12 @@ document.getElementById("notes-form").addEventListener("submit", function (s) {
       notesList
         .insertAdjacentElement("beforeend", newNote)
         .classList.add("list-group-item");
+      newNote.setAttribute("id", data.noteId);
       // newNote.contentEditable = "true";
       newNote.insertAdjacentHTML("beforeend", data.noteContent);
     });
 });
+
 // });
 
 // const handleDelete = (evt) => {
