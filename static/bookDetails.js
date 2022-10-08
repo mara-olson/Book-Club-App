@@ -15,6 +15,27 @@ const getNoteList = () => {
         const newNote = document.createElement("li");
         const editNoteBtn = document.createElement("i");
         editNoteBtn.setAttribute("class", "bi bi-pencil-square");
+        const deleteIcon = document.createElement("i");
+        deleteIcon.setAttribute("class", "bi bi-trash-fill");
+        deleteIcon.addEventListener("click", () => {
+          fetch(`/api/library/${book_title}`, {
+            method: "DELETE",
+            credentials: "include",
+            body: JSON.stringify({
+              book_title: book_title,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data.success);
+              if (data.success) {
+                console.log(data.reponse);
+              }
+            });
+        });
         // console.log(data.notes[note].content);
         if (
           data.notes[note].content != 0 &&
@@ -27,6 +48,7 @@ const getNoteList = () => {
           newNote.setAttribute("id", data.notes[note].note_id);
           newNote.insertAdjacentHTML("beforeend", data.notes[note].content);
           newNote.appendChild(editNoteBtn);
+          newNote.appendChild(deleteIcon);
 
           newNote.addEventListener("submit", (evt) => {
             evt.preventDefault();
