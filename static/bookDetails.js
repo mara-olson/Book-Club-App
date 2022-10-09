@@ -14,8 +14,6 @@ const getNoteList = () => {
       for (note in data.notes) {
         const newNote = document.createElement("li");
         const noteId = data.notes[note].note_id;
-        // const editNoteBtn = document.createElement("i");
-        // editNoteBtn.setAttribute("class", "bi bi-pencil-square");
 
         const deleteIcon = document.createElement("i");
         deleteIcon.setAttribute("class", "bi bi-trash-fill");
@@ -49,7 +47,7 @@ const getNoteList = () => {
           newNote.setAttribute("id", noteId);
           newNote.insertAdjacentHTML("beforeend", data.notes[note].content);
           // newNote.appendChild(editNoteBtn);
-          newNote.appendChild(deleteIcon);
+          newNote.insertAdjacentElement("beforeend", deleteIcon);
 
           const editInput = document.createElement("input");
           editInput.setAttribute("type", "text");

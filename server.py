@@ -16,7 +16,6 @@ API_KEY = 'KEY'
 @app.route("/")
 def homepage():
     """Landing page for bookclub app."""
-    
     return render_template('base.html')
 
 
@@ -25,10 +24,7 @@ def add_book():
     """Add a new book to the database."""
     data = request.json
 
-    print("*"*20, data)
-
     new_book_title = data.get("new_book_title")
-    # print(new_book_title, "*"*20)
     new_book_author = data.get("new_book_author")
     new_book_year = data.get("new_book_year")
     new_book_date_read = data.get("new_book_date_read")
@@ -47,7 +43,6 @@ def all_books():
     all_books = Book.query.all()
     # if all_books:
     for book in all_books:
-        # print("*"*5,book)
         if book.title not in book_titles:
             new_book = {
                 "book_id": book.book_id, "title": book.title,
@@ -63,7 +58,6 @@ def all_books():
 
     if all_books:
         last_book = books[-1]
-        # print("LAST BOOK: ", last_book["title"])
     else:
         last_book = None
 
@@ -99,7 +93,6 @@ def all_notes(book_title):
     sorted_notes = sorted(all_notes, key=lambda x:x.note_id)
 
     for note in sorted_notes:
-        # print("*"*5,note)
         new_note = {
             "note_id": note.note_id, 
             "content": note.content,
@@ -107,11 +100,11 @@ def all_notes(book_title):
             "quote": note.quote,
         }
         notes.append(new_note)
-    
-    # sorted_notes = sorted(all_notes, key=lambda x:x.note_id)
 
-    last_note = notes[-1]
-    print("LAST NOTE: ", last_note)
+    if all_notes:
+       last_note = notes[-1]
+    else:
+        last_note = None
 
     return jsonify({"notes": notes, "last_note": last_note})
 
@@ -120,7 +113,6 @@ def all_notes(book_title):
 @app.route("/api/library/<book_title>/add-notes", methods=["POST"])
 def save_book_notes(book_title):
     """Add and save user-entered notes."""
-
     book = Book.get_book_by_title(book_title)
 
     notes = request.json.get("notes")
@@ -139,8 +131,6 @@ def save_book_notes(book_title):
 @app.route("/api/library/<book_title>/all-notes", methods=["POST"])
 def edit_note(book_title):
     """Edit and save user-entered notes."""
-    
-
     book_title = request.json.get("book_title") 
 
     note_id = request.json.get("note_id")
@@ -190,16 +180,6 @@ def delete_note(book_title):
     else:
         return jsonify({
         "success": False})
-
-    # Note.delete_note(note.note_id)
-
-    # print(f"Activity {note.note_id} deleted")
-
-    # check_note = Note.query.filter(Note.content == note_content).all()
-
-    # if not check_note:
-    #     return jsonify({
-    #     "success": True})
 
 
 
