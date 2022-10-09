@@ -17,7 +17,7 @@ const getNoteList = () => {
 
         const deleteIcon = document.createElement("i");
         deleteIcon.setAttribute("class", "bi bi-trash-fill");
-        deleteIcon.setAttribute("class", "hidden-note-input");
+        deleteIcon.classList.add("class", "hidden-note-input");
         deleteIcon.addEventListener("click", () => {
           fetch(`/api/library/${book_title}/all-notes`, {
             method: "DELETE",
@@ -60,13 +60,20 @@ const getNoteList = () => {
           saveEditInput.innerHTML = "Save";
 
           newNote.addEventListener("click", function () {
-            editInput.setAttribute("class", "show-note-input");
-            saveEditInput.setAttribute("class", "show-note-input");
-            deleteIcon.setAttribute("class", "show-note-input");
+            if (editInput.classList.contains("hidden-note-input")) {
+              editInput.setAttribute("class", "show-note-input");
+              saveEditInput.setAttribute("class", "show-note-input");
+              deleteIcon.classList.add("show-note-input");
+            } else {
+              editInput.setAttribute("class", "hidden-note-input");
+              saveEditInput.setAttribute("class", "hidden-note-input");
+              deleteIcon.classList.remove("show-note-input");
+            }
           });
 
           newNote.insertAdjacentElement("beforeend", editInput);
           newNote.insertAdjacentElement("beforeend", saveEditInput);
+          newNote.insertAdjacentElement("beforeend", deleteIcon);
 
           newNote.addEventListener("submit", (evt) => {
             evt.preventDefault();
