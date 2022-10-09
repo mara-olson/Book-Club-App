@@ -17,6 +17,7 @@ const getBookList = () => {
         newTitleCell.setAttribute("class", "bookTitleCell");
         newTitleCell.addEventListener("click", (evt) => {
           evt.preventDefault();
+          window.sessionStorage.setItem("title", bookTitle);
           location.replace(`/library/${bookTitle}`);
         });
 

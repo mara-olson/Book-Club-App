@@ -17,6 +17,7 @@ const getNoteList = () => {
 
         const deleteIcon = document.createElement("i");
         deleteIcon.setAttribute("class", "bi bi-trash-fill");
+        deleteIcon.setAttribute("class", "hidden-note-input");
         deleteIcon.addEventListener("click", () => {
           fetch(`/api/library/${book_title}/all-notes`, {
             method: "DELETE",
@@ -35,7 +36,6 @@ const getNoteList = () => {
               }
             });
         });
-        // console.log(data.notes[note].content);
         if (
           data.notes[note].content != 0 &&
           data.notes[note].category == "content"
@@ -46,7 +46,6 @@ const getNoteList = () => {
 
           newNote.setAttribute("id", noteId);
           newNote.insertAdjacentHTML("beforeend", data.notes[note].content);
-          // newNote.appendChild(editNoteBtn);
           newNote.insertAdjacentElement("beforeend", deleteIcon);
 
           const editInput = document.createElement("input");
@@ -63,6 +62,7 @@ const getNoteList = () => {
           newNote.addEventListener("click", function () {
             editInput.setAttribute("class", "show-note-input");
             saveEditInput.setAttribute("class", "show-note-input");
+            deleteIcon.setAttribute("class", "show-note-input");
           });
 
           newNote.insertAdjacentElement("beforeend", editInput);
@@ -96,16 +96,39 @@ const getNoteList = () => {
           quoteList
             .insertAdjacentElement("beforeend", newNote)
             .classList.add("list-group-item");
-          newNote.setAttribute("id", data.notes[note].note_id);
-          newNote.insertAdjacentHTML("beforeend", data.notes[note].content);
 
-          newNote.addEventListener("click", (evt) => {
+          newNote.setAttribute("id", noteId);
+          newNote.insertAdjacentHTML("beforeend", data.notes[note].content);
+          newNote.insertAdjacentElement("beforeend", deleteIcon);
+
+          const editInput = document.createElement("input");
+          editInput.setAttribute("type", "text");
+          editInput.setAttribute("id", "note-" + noteId + "-input");
+          editInput.setAttribute("class", "hidden-note-input");
+
+          const saveEditInput = document.createElement("button");
+          saveEditInput.setAttribute("onclick", `editNote(this.id, ${noteId})`);
+          saveEditInput.setAttribute("id", "note-" + noteId + "-input-btn");
+          saveEditInput.setAttribute("class", "hidden-note-input");
+          saveEditInput.innerHTML = "Save";
+
+          newNote.addEventListener("click", function () {
+            editInput.setAttribute("class", "show-note-input");
+            saveEditInput.setAttribute("class", "show-note-input");
+          });
+
+          newNote.insertAdjacentElement("beforeend", editInput);
+          newNote.insertAdjacentElement("beforeend", saveEditInput);
+
+          newNote.addEventListener("submit", (evt) => {
+            evt.preventDefault();
+
             newNote.setAttribute("contenteditable", "true");
 
             const editedNoteContent = {
               book_title: book_title,
               note_id: newNote.id,
-              note_content: newNote.value,
+              note_content: newNote.innerHTML,
               category: "quote",
             };
 
@@ -125,17 +148,40 @@ const getNoteList = () => {
           vocabList
             .insertAdjacentElement("beforeend", newNote)
             .classList.add("list-group-item");
-          newNote.setAttribute("id", data.notes[note].note_id);
-          newNote.insertAdjacentHTML("beforeend", data.notes[note].content);
 
-          newNote.addEventListener("click", (evt) => {
+          newNote.setAttribute("id", noteId);
+          newNote.insertAdjacentHTML("beforeend", data.notes[note].content);
+          newNote.insertAdjacentElement("beforeend", deleteIcon);
+
+          const editInput = document.createElement("input");
+          editInput.setAttribute("type", "text");
+          editInput.setAttribute("id", "note-" + noteId + "-input");
+          editInput.setAttribute("class", "hidden-note-input");
+
+          const saveEditInput = document.createElement("button");
+          saveEditInput.setAttribute("onclick", `editNote(this.id, ${noteId})`);
+          saveEditInput.setAttribute("id", "note-" + noteId + "-input-btn");
+          saveEditInput.setAttribute("class", "hidden-note-input");
+          saveEditInput.innerHTML = "Save";
+
+          newNote.addEventListener("click", function () {
+            editInput.setAttribute("class", "show-note-input");
+            saveEditInput.setAttribute("class", "show-note-input");
+          });
+
+          newNote.insertAdjacentElement("beforeend", editInput);
+          newNote.insertAdjacentElement("beforeend", saveEditInput);
+
+          newNote.addEventListener("submit", (evt) => {
+            evt.preventDefault();
+
             newNote.setAttribute("contenteditable", "true");
 
             const editedNoteContent = {
               book_title: book_title,
               note_id: newNote.id,
-              note_content: newNote.value,
-              category: "quote",
+              note_content: newNote.innerHTML,
+              category: "vocab",
             };
 
             fetch(`/api/library/${book_title}/all-notes`, {
@@ -229,9 +275,13 @@ const editNote = (target_id, note_id) => {
   // evt.preventDefault();
 
   book_title = window.sessionStorage.getItem("title");
-  console.log(window.sessionStorage.getItem("title"));
+  // console.log(window.sessionStorage.getItem("title"));
+  // console.log(target_id.slice(0, -4));
+  const inputField = document.getElementById(target_id.slice(0, -4));
 
-  const newContent = document.getElementById(target_id.slice(0, 13)).value;
+  const noteToEdit = document.getElementById(note_id);
+
+  const newContent = inputField.value;
 
   const editedNoteContent = {
     book_title: book_title,
@@ -249,7 +299,16 @@ const editNote = (target_id, note_id) => {
   })
     .then((response) => response.json())
     .then((data) => {
+      noteToEdit.innerHTML = newContent;
+
+      inputField.setAttribute("class", "hidden-note-input");
+      document
+        .getElementById(target_id)
+        .setAttribute("class", "hidden-note-input");
+
+      // inputField.classList.remove("show-note-input");
+      // document.getElementById(target_id).classList.remove("show-note-input");
       console.log("edited");
-      window.location.reload();
+      // window.location.reload();
     });
 };
