@@ -33,9 +33,9 @@ td {
 }
 
 .hidden-note-input {
-  visibility: hidden;
+  display: none;
 }
 
 .show-note-input {
-  visibility: visible !important;
+  display: inline !important;
 }
