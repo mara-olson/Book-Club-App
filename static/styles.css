@@ -31,3 +31,11 @@ td {
   cursor: pointer;
   color: blue;
 }
+
+.hidden-note-input {
+  visibility: hidden;
+}
+
+.show-note-input {
+  visibility: visible !important;
+}

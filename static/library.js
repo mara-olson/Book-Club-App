@@ -44,7 +44,7 @@ const getBookList = () => {
         const deleteIcon = document.createElement("i");
         deleteBookButton.appendChild(deleteIcon);
         deleteIcon.setAttribute("class", "bi bi-trash-fill");
-        deleteBookButton.addEventListener("click", (evt) => {
+        deleteBookButton.addEventListener("click", () => {
           fetch(`/api/library/${bookTitle}`, {
             method: "DELETE",
             credentials: "include",
@@ -57,14 +57,11 @@ const getBookList = () => {
           })
             .then((response) => response.json())
             .then((data) => {
-              getBookList();
               console.log(data.success);
-              // if (data.success) {
-              // console.log(data.reponse);
-              // }
+              if (data.success) {
+                console.log(data.reponse);
+              }
             });
-
-          // addRowHandlers();
         });
         // deleteBookButton.onclick(handleDelete(bookTitle));
       }

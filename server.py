@@ -96,14 +96,19 @@ def all_notes(book_title):
 
     all_notes = Note.query.filter(Note.book_id == book.book_id).all()
 
-    for note in all_notes:
+    sorted_notes = sorted(all_notes, key=lambda x:x.note_id)
+
+    for note in sorted_notes:
         # print("*"*5,note)
         new_note = {
-            "note_id": note.note_id, "content": note.content,
+            "note_id": note.note_id, 
+            "content": note.content,
             "category": note.category,
             "quote": note.quote,
         }
         notes.append(new_note)
+    
+    # sorted_notes = sorted(all_notes, key=lambda x:x.note_id)
 
     last_note = notes[-1]
     print("LAST NOTE: ", last_note)
@@ -157,21 +162,29 @@ def edit_note(book_title):
 @app.route("/api/library/<book_title>", methods=["DELETE"])
 def delete_book(book_title):
     """Remove book from library."""
-    # note_content = request.json.get("content")
-
     book_title = request.json.get("book_title")
-    # NOTE: Needed? ^^
     
-    # book = Book.get_book_by_title(book_title)
-    # print(book_title,"*"*20)
-    # NOTE: ^^ Replacing above with direct placement in delete_book argument
-
-    # Book.delete_book(Book.get_book_by_title(book_title))
     Book.delete_book(book_title)
-    # NOTE: seeing if session works
 
     if not Book.get_book_by_title(book_title):
         print("DELETED: ", book_title)
+        return jsonify({
+        "success": True})
+    else:
+        return jsonify({
+        "success": False})
+
+
+@app.route("/api/library/<book_title>/all-notes", methods=["DELETE"])
+def delete_note(book_title):
+    """Remove note."""
+    book_title = session["title"]
+    note_id = request.json.get("note_id")
+    
+    Note.delete_note(note_id)
+
+    if not Note.query.filter(Note.note_id == note_id).first():
+        print("DELETED: ", note_id)
         return jsonify({
         "success": True})
     else:

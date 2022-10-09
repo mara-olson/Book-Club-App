@@ -31,7 +31,11 @@
       data-parent="#accordion"
     >
       <div class="card-body" id="content-notes-body">
-        <ul id="content-notes-list" data-toggle="modal" data-target="#edit-note-modal"></ul>
+        <ul id="content-notes-list" data-toggle="modal" data-target="#edit-note-modal">
+          <input type="text" id="note-input" class="hidden-note-input">
+          <button onclick="editNote()" class="hidden-note-input">Save</button>
+        </ul>
+        </ul>
         <form method="post" id="notes-form" class="add-notes-form">
           <div class="form-group">
             <label for="entered-content-notes">Add notes</label>
@@ -47,7 +51,7 @@
         </form>
       </div>
       </div>
-      <div
+      <!-- <div
         class="modal"
         tabindex="-1"
         role="dialog"
@@ -97,7 +101,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
 
           <div class="card-header" id="quotes-header">
             <h4>
