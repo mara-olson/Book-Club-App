@@ -33,7 +33,6 @@
       <div class="card-body" id="content-notes-body">
         <ul id="content-notes-list" >
         </ul>
-        </ul>
         <form method="post" id="notes-form" class="add-notes-form">
           <div class="form-group">
             <label for="entered-content-notes">Add notes</label>
@@ -74,7 +73,7 @@
             <div class="modal-footer">
                 <button
                   class="btn btn-primary btn-danger"
-                  id="delete-note-btn"
+                  id="delete-modal-btn"
                   data-dismiss="modal"
                 >
                   Delete
@@ -109,14 +108,7 @@
             
           >
             <div class="card-body" id="quotes-notes-body">
-              {% if notes %}
-                <ul class="list-group list-group-flush" id="quotes-notes-list">
-                  {% for note in notes %}
-                  <li class="list-group-item" id="quotes-notes-item">{{ note }}</li>
-                  {% endfor %}
-                </ul>
-              {% endif %}
-              <!-- NOTE: Adding Jinja for instead of js fxn to loop through notes -->
+              <ul id="quotes-notes-list"></ul>
               <form method="post" id="quotes-form" class="add-notes-form">
                 <div class="form-group">
                   <label for="entered-quotes-notes" >Add notes</label>

@@ -173,7 +173,7 @@ def delete_note(book_title):
     
     Note.delete_note(note_id)
 
-    if not Note.query.filter(Note.note_id == note_id).first():
+    if not session.query(Note).get(note_id):
         print("DELETED: ", note_id)
         return jsonify({
         "success": True})
