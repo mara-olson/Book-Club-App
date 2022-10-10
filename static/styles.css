@@ -39,3 +39,20 @@ td {
 .show-note-input {
   display: inline !important;
 }
+
+.modal-body {
+  margin: auto;
+}
+
+.modal-footer {
+  margin: auto;
+}
+
+.delete-note-btn {
+  margin: 10px;
+}
+
+.list-group-item textarea {
+  margin-top: 10px;
+  width: 100%;
+}

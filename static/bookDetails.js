@@ -12,13 +12,27 @@ const getNoteList = () => {
     .then((data) => {
       // console.log(data.notes);
       for (note in data.notes) {
-        const newNote = document.createElement("li");
         const noteId = data.notes[note].note_id;
+        const newNote = document.createElement("li");
+        const newNoteText = document.createElement("a");
+        newNoteText.setAttribute("id", "a-" + noteId);
+        newNote.insertAdjacentElement("beforeend", newNoteText);
 
-        const deleteIcon = document.createElement("i");
+        // const deleteBtn = document.createElement("button");
+        // deleteBtn
+        const deleteIcon = document.createElement("button");
+
         deleteIcon.setAttribute("class", "bi bi-trash-fill");
         deleteIcon.classList.add("class", "hidden-note-input");
-        deleteIcon.addEventListener("click", () => {
+        deleteIcon.classList.add("btn");
+        deleteIcon.classList.add("btn-danger");
+        deleteIcon.classList.add("delete-note-btn");
+        deleteIcon.setAttribute("data-toggle", "modal");
+        deleteIcon.setAttribute("data-target", "#delete-note-modal");
+
+        const confirmDeleteBtn = document.getElementById("delete-note-btn");
+
+        confirmDeleteBtn.addEventListener("click", () => {
           fetch(`/api/library/${book_title}/all-notes`, {
             method: "DELETE",
             credentials: "include",
@@ -45,60 +59,74 @@ const getNoteList = () => {
             .classList.add("list-group-item");
 
           newNote.setAttribute("id", noteId);
-          newNote.insertAdjacentHTML("beforeend", data.notes[note].content);
-          newNote.insertAdjacentElement("beforeend", deleteIcon);
+          newNoteText.insertAdjacentHTML("beforeend", data.notes[note].content);
+          newNoteText.insertAdjacentElement("beforeend", deleteIcon);
 
-          const editInput = document.createElement("input");
-          editInput.setAttribute("type", "text");
+          const editInput = document.createElement("textarea");
+          editInput.setAttribute("value", newNoteText.innerHTML);
           editInput.setAttribute("id", "note-" + noteId + "-input");
           editInput.setAttribute("class", "hidden-note-input");
 
           const saveEditInput = document.createElement("button");
           saveEditInput.setAttribute("onclick", `editNote(this.id, ${noteId})`);
           saveEditInput.setAttribute("id", "note-" + noteId + "-input-btn");
-          saveEditInput.setAttribute("class", "hidden-note-input");
+          saveEditInput.classList.add("hidden-note-input");
+          saveEditInput.classList.add("btn");
+          saveEditInput.classList.add("btn-secondary");
           saveEditInput.innerHTML = "Save";
 
-          newNote.addEventListener("click", function () {
+          newNoteText.addEventListener("click", function () {
+            editInput.value = newNoteText.innerHTML;
+
             if (editInput.classList.contains("hidden-note-input")) {
+              newNoteText.style.color = "silver";
               editInput.setAttribute("class", "show-note-input");
-              saveEditInput.setAttribute("class", "show-note-input");
+              saveEditInput.classList.add("show-note-input");
               deleteIcon.classList.add("show-note-input");
             } else {
+              newNoteText.style.color = "black";
               editInput.setAttribute("class", "hidden-note-input");
-              saveEditInput.setAttribute("class", "hidden-note-input");
+              saveEditInput.classList.remove("show-note-input");
               deleteIcon.classList.remove("show-note-input");
             }
           });
 
+          newNote.insertAdjacentElement(
+            "beforeend",
+            document.createElement("div")
+          );
           newNote.insertAdjacentElement("beforeend", editInput);
+          newNote.insertAdjacentElement(
+            "beforeend",
+            document.createElement("div")
+          );
           newNote.insertAdjacentElement("beforeend", saveEditInput);
           newNote.insertAdjacentElement("beforeend", deleteIcon);
 
-          newNote.addEventListener("submit", (evt) => {
-            evt.preventDefault();
+          // newNote.addEventListener("submit", (evt) => {
+          //   evt.preventDefault();
 
-            newNote.setAttribute("contenteditable", "true");
+          //   // newNote.setAttribute("contenteditable", "true");
 
-            const editedNoteContent = {
-              book_title: book_title,
-              note_id: newNote.id,
-              note_content: newNote.innerHTML,
-              category: "content",
-            };
+          //   const editedNoteContent = {
+          //     book_title: book_title,
+          //     note_id: newNote.id,
+          //     note_content: newNote.innerHTML,
+          //     category: "content",
+          //   };
 
-            fetch(`/api/library/${book_title}/all-notes`, {
-              method: "POST",
-              body: JSON.stringify(editedNoteContent),
-              headers: {
-                "Content-Type": "application/json",
-              },
-            })
-              .then((response) => response.json())
-              .then((data) => {
-                window.location.reload();
-              });
-          });
+          //   fetch(`/api/library/${book_title}/all-notes`, {
+          //     method: "POST",
+          //     body: JSON.stringify(editedNoteContent),
+          //     headers: {
+          //       "Content-Type": "application/json",
+          //     },
+          //   })
+          //     .then((response) => response.json())
+          //     .then((data) => {
+          //       window.location.reload();
+          //     });
+          // });
         } else if (data.notes[note].category == "quote") {
           quoteList
             .insertAdjacentElement("beforeend", newNote)
@@ -109,7 +137,7 @@ const getNoteList = () => {
           newNote.insertAdjacentElement("beforeend", deleteIcon);
 
           const editInput = document.createElement("input");
-          editInput.setAttribute("type", "text");
+          // editInput.setAttribute("type", "textarea");
           editInput.setAttribute("id", "note-" + noteId + "-input");
           editInput.setAttribute("class", "hidden-note-input");
 
@@ -282,11 +310,14 @@ const editNote = (target_id, note_id) => {
   // evt.preventDefault();
 
   book_title = window.sessionStorage.getItem("title");
-  // console.log(window.sessionStorage.getItem("title"));
-  // console.log(target_id.slice(0, -4));
+
   const inputField = document.getElementById(target_id.slice(0, -4));
 
-  const noteToEdit = document.getElementById(note_id);
+  const noteTextToEdit = document.getElementById("a-" + note_id);
+
+  const deleteIcon = document.querySelectorAll(
+    ".delete-note-btn.show-note-input"
+  )[0];
 
   const newContent = inputField.value;
 
@@ -306,12 +337,12 @@ const editNote = (target_id, note_id) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      noteToEdit.innerHTML = newContent;
+      noteTextToEdit.innerHTML = newContent;
+      noteTextToEdit.style.color = "black";
+      deleteIcon.classList.remove("show-note-input");
 
       inputField.setAttribute("class", "hidden-note-input");
-      document
-        .getElementById(target_id)
-        .setAttribute("class", "hidden-note-input");
+      document.getElementById(target_id).classList.remove("show-note-input");
 
       // inputField.classList.remove("show-note-input");
       // document.getElementById(target_id).classList.remove("show-note-input");
