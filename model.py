@@ -64,7 +64,7 @@ class Note(db.Model):
         return note
 
     @classmethod
-    def delete_note(cls, note_id):
+    def delete_note(cls, book_id, note_id):
         note = Note.query.get(note_id)
 
         db.session.delete(note)

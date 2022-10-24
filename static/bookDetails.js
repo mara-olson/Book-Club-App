@@ -36,11 +36,12 @@ const getNoteList = () => {
 
         confirmDeleteBtn.addEventListener("click", (evt) => {
           evt.preventDefault();
-          fetch(`/api/library/${book_title}/all-notes`, {
+          fetch(`/api/library/${book_title}/${noteId}`, {
             method: "DELETE",
             credentials: "include",
             body: JSON.stringify({
               note_id: noteId,
+              book_title: book_title,
             }),
             headers: {
               "Content-Type": "application/json",
@@ -252,7 +253,12 @@ for (let form of document.getElementsByTagName("form")) {
 
     fetch(`/api/library/${book_title}/add-notes`, {
       method: "POST",
-      body: JSON.stringify(formInputs),
+      credentials: "include",
+      body: JSON.stringify({
+        book_title: book_title,
+        notes: notes,
+        category: noteCategory,
+      }),
       headers: {
         "Content-Type": "application/json",
       },

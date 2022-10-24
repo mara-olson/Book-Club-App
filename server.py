@@ -74,7 +74,7 @@ def library_page():
 def book_details(book_title):
     """Specific details about a particular book."""
     book = Book.get_book_by_title(book_title)
-    session['title'] = book.title
+    session["title"] = book.title
 
     date_read = str(book.date_read)[:10]
     notes = book.notes
@@ -114,16 +114,20 @@ def all_notes(book_title):
 def save_book_notes(book_title):
     """Add and save user-entered notes."""
     book = Book.get_book_by_title(book_title)
+    print("BOOK IS: ", book, "*"*20)
 
     notes = request.json.get("notes")
+    print("NOTES ARE: ", book, "*"*20)
 
     category = request.json.get("category")
+    print("CATEGORY IS: ", book, "*"*20)
 
     new_note = Note.create_note(book, notes)
 
     new_note.category = category
 
     db.session.commit()
+    print("NEW NOTE: ", new_note.content, "!!!!!!!")
 
     return jsonify({"noteContent": new_note.content, "noteId": new_note.note_id})
 
@@ -165,15 +169,23 @@ def delete_book(book_title):
         "success": False})
 
 
-@app.route("/api/library/<book_title>/all-notes", methods=["DELETE"])
-def delete_note(book_title):
+@app.route("/api/library/<book_title>/<note_id>", methods=["DELETE"])
+def delete_note(book_title, note_id):
     """Remove note."""
-    book_title = session["title"]
-    note_id = request.json.get("note_id")
-    
-    Note.delete_note(note_id)
+    book_title = request.json.get("book_title")
 
-    if not session.query(Note).get(note_id):
+    book = Book.get_book_by_title(book_title)
+    book_id = book.book_id
+
+    print("TITLE: ",book_title, "*"*25)
+
+    note_id = request.json.get("note_id")
+
+    print("NOTE ID: ", note_id, "*"*25)
+    
+    Note.delete_note(book_id, note_id)
+
+    if not Note.query.get(note_id):
         print("DELETED: ", note_id)
         return jsonify({
         "success": True})
