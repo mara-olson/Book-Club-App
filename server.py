@@ -48,13 +48,20 @@ def all_books():
                 "book_id": book.book_id, "title": book.title,
                 "author": book.author,
                 "year_published": book.year_published,
-                "date_read": book.date_read,
+                "date_read": str(book.date_read)[:10],
                 "rating": book.rating
             }
+            # book.date_read = str(book.date_read)[:10]
             book_titles.append(book.title)
             books.append(new_book)
 
     session["all_titles"] = book_titles
+
+    # def get_date_read(book):
+        # book.get('date_read')
+        
+    books.sort(key=lambda x: x['date_read'], reverse=True)
+    print(books, "*"*35)
 
     if all_books:
         last_book = books[-1]
