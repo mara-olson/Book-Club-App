@@ -19,7 +19,7 @@ def homepage():
     return render_template('base.html')
 
 
-@app.route("/api/add-book", methods=["POST"])
+@app.route("/api/library/add-book", methods=["POST"])
 def add_book():
     """Add a new book to the database."""
     data = request.json
@@ -29,10 +29,64 @@ def add_book():
     new_book_year = data.get("new_book_year")
     new_book_date_read = data.get("new_book_date_read")
     new_book_rating = data.get("new_book_rating")
+    new_book_read = True
 
-    new_book = Book.create_book(title=new_book_title, author=new_book_author, year_published=new_book_year, date_read=new_book_date_read, rating=new_book_rating)
+    new_book = Book.create_book(title=new_book_title, author=new_book_author, year_published=new_book_year, date_read=new_book_date_read, rating=new_book_rating, read=new_book_read)
 
     return jsonify({"bookTitle": new_book.title, "bookAuthor": new_book.author, "bookPubYr": new_book.year_published, "bookDateRead": new_book.date_read, "bookRating": new_book.rating})
+
+
+@app.route("/api/umbertos-library/add-book", methods=["POST"])
+def add_umberto_book():
+    """Add a new book to the database."""
+    data = request.json
+
+    new_book_title = data.get("new_book_title")
+    new_book_author = data.get("new_book_author")
+    new_book_year = data.get("new_book_year")
+    new_book_date_read = data.get("new_book_date_read")
+    new_book_rating = data.get("new_book_rating")
+    new_book_read = False
+
+    new_book = Book.create_book(title=new_book_title, author=new_book_author, year_published=new_book_year, date_read=new_book_date_read, rating=new_book_rating, read=new_book_read)
+
+    return jsonify({"bookTitle": new_book.title, "bookAuthor": new_book.author, "bookPubYr": new_book.year_published, "bookDateRead": new_book.date_read, "bookRating": new_book.rating})
+
+@app.route("/api/umbertos-library")
+def all_books_to_read():
+    """All book titles in database."""
+    books = []
+    book_titles =[]
+
+    all_books = Book.query.filter_by(read = False).all()
+    print("ALL UMB BOOKS: ", all_books, "*"*40)
+    # if all_books:
+    for book in all_books:
+        if book.title not in book_titles:
+            new_book = {
+                "book_id": book.book_id, "title": book.title,
+                "author": book.author,
+                "year_published": book.year_published,
+                "date_read": str(book.date_read)[:10],
+                "rating": book.rating,
+                "read":False
+            }
+            # book.date_read = str(book.date_read)[:10]
+            book_titles.append(book.title)
+            books.append(new_book)
+
+    session["all_titles"] = book_titles
+        
+    books.sort(key=lambda x: x['date_read'], reverse=True)
+    print(books, "*"*35)
+
+    if all_books:
+        last_book = books[-1]
+    else:
+        last_book = None
+
+    return jsonify({"books": books, "last_book": last_book})
+
 
 @app.route("/api/library")
 def all_books():
@@ -40,7 +94,7 @@ def all_books():
     books = []
     book_titles =[]
 
-    all_books = Book.query.all()
+    all_books = Book.query.filter(Book.read==True).all()
     # if all_books:
     for book in all_books:
         if book.title not in book_titles:
@@ -56,9 +110,6 @@ def all_books():
             books.append(new_book)
 
     session["all_titles"] = book_titles
-
-    # def get_date_read(book):
-        # book.get('date_read')
         
     books.sort(key=lambda x: x['date_read'], reverse=True)
     print(books, "*"*35)
@@ -69,6 +120,11 @@ def all_books():
         last_book = None
 
     return jsonify({"books": books, "last_book": last_book})
+
+@app.route("/umbertos-library")
+def umbertos_library_page():
+    """Display all book titles in database."""
+    return render_template("umbertos_library.html")
 
 
 @app.route("/library")

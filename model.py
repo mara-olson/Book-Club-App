@@ -12,14 +12,15 @@ class Book(db.Model):
     year_published = db.Column(db.Integer)
     date_read = db.Column(db.DateTime)
     rating = db.Column(db.Integer)
+    read = db.Column(db.Boolean)
     # note_ids = db.Column(db.ARRAY)
 
     notes = db.relationship("Note", back_populates="book")
     
     @classmethod
-    def create_book(cls, title, author, year_published=None, date_read=None, rating=None):
+    def create_book(cls, title, author, year_published=None, date_read=None, rating=None, read=False):
         """Add a new book to the database."""
-        book = cls(title=title, author=author, year_published=year_published, date_read=date_read, rating=rating)
+        book = cls(title=title, author=author, year_published=year_published, date_read=date_read, rating=rating, read=read)
         
         db.session.add(book)
         db.session.commit()

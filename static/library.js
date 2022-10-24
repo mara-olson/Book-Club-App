@@ -161,7 +161,7 @@ document.getElementById("submit-new-book-btn").addEventListener("click", () => {
   };
   // console.log(newBookInputs);
 
-  fetch("/api/add-book", {
+  fetch("/api/library/add-book", {
     method: "POST",
     body: JSON.stringify(newBookInputs),
     headers: {
