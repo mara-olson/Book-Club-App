@@ -31,21 +31,27 @@
       data-parent="#accordion"
     >
       <div class="card-body" id="content-notes-body">
-        <ul id="content-notes-list" >
-        </ul>
-        <form method="post" id="notes-form" class="add-notes-form">
-          <div class="form-group">
-            <label for="entered-content-notes">Add notes</label>
-            <textarea
-              class="form-control"
-              type="text"
-              id="entered-content-notes"
-              placeholder="Notes here"
-              rows="4"
-            ></textarea>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </div>
-        </form>
+        <!-- <section id="content-notes-text-area">
+          <ul id="content-notes-list" >
+          </ul>
+        </section> -->
+        <div id="edit-content-notes-tiny">
+          <form method="post" id="notes-form" class="add-notes-form">
+            <!-- <div class="form-group">
+              <label for="entered-content-notes">Add notes</label>
+              <textarea
+                class="form-control"
+                type="text"
+                id="entered-content-notes"
+                placeholder="Notes here"
+                rows="4"
+              ></textarea> -->
+              
+            <!-- </div> -->
+          </form>
+          
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
       </div>
       </div>
       <div
@@ -108,7 +114,9 @@
             
           >
             <div class="card-body" id="quotes-notes-body">
-              <ul id="quotes-notes-list"></ul>
+              <section id="quotes-text-area" contenteditable="true">
+                <ul id="quotes-notes-list"></ul>
+            </section>
               <form method="post" id="quotes-form" class="add-notes-form">
                 <div class="form-group">
                   <label for="entered-quotes-notes" >Add notes</label>
@@ -145,8 +153,10 @@
             data-parent="#accordion"
           >
             <div class="card-body" id="vocab-notes-body">
-              <ul class="list-group list-group-flush" id="vocab-notes-list">
-              </ul>
+              <section id="quotes-text-area" contenteditable="true">
+                <ul class="list-group list-group-flush" id="vocab-notes-list">
+                </ul>
+              </section>
               <form method="post" id="vocab-form" class="add-notes-form">
                 <div class="form-group">
                   <label for="entered-vocab-notes">Add notes</label>
