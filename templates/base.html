@@ -34,10 +34,12 @@
     <script>
       tinymce.init({
         selector: "#edit-content-notes-tiny",
-        plugins: "lists, link, image, media",
+        plugins: "lists, link, image, media, save",
         toolbar:
-          "h1 h2 bold italic bullist numlist forecolor | link image media",
+          "h1 h2 bold italic underline bullist numlist forecolor | link image | save",
         menubar: false,
+        inline: true,
+        placeholder: "Click to add notes",
       });
     </script>
 
